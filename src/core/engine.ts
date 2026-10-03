@@ -1,4 +1,5 @@
-import {ENEMIES,RULES,WORLD,WEAPONS,WEAPON_IDS,PASSIVE_IDS,CLASSES,DIFFICULTIES,BOSSES,isBoss,reduction,enemyScaling,spawnInterval,targetPopulation,weaponStats,weaponRank,xpForLevel,type EnemyKind,type WeaponId,type PassiveId,type Ailment} from './config';
+import {ENEMIES,RULES,WORLD,WEAPONS,WEAPON_IDS,PASSIVE_IDS,CLASSES,DIFFICULTIES,isBoss,reduction,enemyScaling,weaponStats,weaponRank,xpForLevel,type EnemyKind,type WeaponId,type PassiveId,type Ailment} from './config';
+import {FLOOR_RULES,floorDifficulty,floorPopulation,floorSpawnInterval} from './floors';
 import {goldReward,fragmentReward} from './economy';
 import {Random} from './random';
 import {SpatialHash} from './spatial';
@@ -9,25 +10,34 @@ export interface Projectile {id:number;x:number;y:number;vx:number;vy:number;dam
 export interface Loot {id:number;x:number;y:number;value:number;heal:boolean}
 export interface Warning {id:number;x:number;y:number;radius:number;remaining:number;duration:number;damage:number;source:number}
 export interface GameEvent {type:string;x:number;y:number;value?:number;crit?:boolean;angle?:number;radius?:number;points?:{x:number;y:number}[];kind?:string}
-export type Status='playing'|'paused'|'upgrade'|'dead'|'retired';
+export type Status='playing'|'paused'|'upgrade'|'floorReward'|'floorReady'|'dead'|'retired';
+export interface EngineOptions {floorDuration?:number}
 export interface Input {x:number;y:number;dash?:boolean}
 const dist=(a:{x:number;y:number},b:{x:number;y:number})=>Math.hypot(a.x-b.x,a.y-b.y);
 const clamp=(v:number,a:number,b:number)=>Math.max(a,Math.min(b,v));
 export class Engine {
- balanceVersion=3;nextChoiceAt=0;
+ balanceVersion=4;nextChoiceAt=0;
+ floor=1;floorTime=0;floorDuration:number=FLOOR_RULES.duration;completedFloors=0;rewardOffers:Upgrade[]=[];chosenReward:Upgrade|null=null;
  rng:Random;config:RunConfig;status:Status='playing';time=0;kills=0;level=1;xp=0;damageDealt=0;gold=0;souls=0;creditedGold=0;creditedSouls=0;bossKills=0;nextBoss=RULES.bossAt;masteryPower=0;rage=0;casts=0;healBudget=0;nextFormation=75;bossSpawned=false;bossDefeated=false;
  build=initialBuild();player={x:WORLD.width/2,y:WORLD.height/2,hp:125,maxHp:125,invulnerable:0,dashLeft:0,dashCooldown:0,directionX:0,directionY:1,moving:false};
  enemies:Enemy[]=[];projectiles:Projectile[]=[];loot:Loot[]=[];warnings:Warning[]=[];events:GameEvent[]=[];offers:Upgrade[]=[];grid=new SpatialHash<Enemy>();
  cooldowns=Object.fromEntries(WEAPON_IDS.map(id=>[id,.25])) as Record<WeaponId,number>;
  weaponDamage=Object.fromEntries([...WEAPON_IDS,'dash'].map(id=>[id,0])) as Record<WeaponId|'dash',number>;
  private nextId=1;private spawnClock=6;private eclipseWas=false;private autoMasteryClock=0;
- constructor(seed?:number,config:RunConfig=defaultRunConfig()){
+ constructor(seed?:number,config:RunConfig=defaultRunConfig(),options:EngineOptions={}){
+  if(options.floorDuration!==undefined){if(!Number.isFinite(options.floorDuration)||options.floorDuration<FLOOR_RULES.minimumTestDuration||options.floorDuration>FLOOR_RULES.duration)throw new RangeError('Invalid floor duration');this.floorDuration=options.floorDuration;}
   this.rng=new Random(seed);this.config=structuredClone(config);this.build=initialBuild(config.startWeapon);
   this.player.maxHp=this.player.hp=CLASSES[config.classId].hp+config.permanent.health*5+this.mastery('guardian')*3;
+  this.spawnOpening();
+ }
+ private spawnOpening(){
   for(let i=0;i<RULES.openingCount;i++){const a=(i%2?Math.PI:0)+(Math.floor(i/2)-4)*.12,r=RULES.openingRadius+(i%4)*60;this.spawn(i%6===0?'crawler':'hollow',this.player.x+Math.cos(a)*r,this.player.y+Math.sin(a)*r);}
  }
  mastery(id:MasteryId){return this.config.masteries.includes(id)?this.config.masteryLevels[id]:0;}
- get eclipse(){return this.time%90>=70;}
+ get eclipse(){return false;}
+ get floorProgress(){return this.floorTime/this.floorDuration;}
+ get floorRemaining(){return Math.max(0,this.floorDuration-this.floorTime);}
+ get encounterTime(){return this.floorProgress*FLOOR_RULES.duration+Math.min(FLOOR_RULES.maximumEncounterAdvance,(this.floor-1)*FLOOR_RULES.encounterAdvancePerFloor);}
  get damageMultiplier(){return CLASSES[this.config.classId].damage*(1+this.config.permanent.attack*.02+this.build.passives.power*.08+this.masteryPower*.01)*(this.config.classId==='warrior'?1+this.rage*(.3+this.mastery('berserker')*.06):1)*(this.eclipse?1.12:1);}
  get attackSpeed(){return Math.min(3,1+this.build.passives.haste*.06+this.mastery('storm')*.05);}
  get rangeMultiplier(){return 1+this.build.passives.reach*.06;}
@@ -56,12 +66,33 @@ export class Engine {
   if(this.completeBuild){this.autoMasteryClock++;this.masteryPower++;if(this.autoMasteryClock%5===0){this.player.maxHp+=4;this.player.hp+=4;}this.emit('mastery');return;}
   this.offers=choices(this.build,this.rng,this.config,this.build.passives.fortune*.015+this.config.permanent.luck*.01);this.status='upgrade';this.emit('level');}
  spawn(kind?:EnemyKind,x?:number,y?:number,summoned=false):Enemy|undefined{
-  if(this.enemies.length>=RULES.enemyCap||(!kind||!isBoss(kind))&&this.enemies.length>=Math.min(RULES.enemyCap,targetPopulation(this.time)+15))return;
-  if(!kind){const roll=this.rng.next();kind=this.time>=240&&roll<.04?'reaper':this.time>=160&&roll<.08?'seer':this.time>=100&&roll<.18?'brute':this.time>=75&&roll<.29?'armored':this.time>=55&&roll<.37?'charger':roll<.57?'crawler':'hollow';}
+  if(this.enemies.length>=RULES.enemyCap||(!kind||!isBoss(kind))&&this.enemies.length>=Math.min(RULES.enemyCap,floorPopulation(this.floor,this.floorProgress)+15))return;
+  if(!kind){const roll=this.rng.next(),t=this.encounterTime;kind=t>=240&&roll<.04?'reaper':t>=160&&roll<.08?'seer':t>=100&&roll<.18?'brute':t>=75&&roll<.29?'armored':t>=55&&roll<.37?'charger':roll<.57?'crawler':'hollow';}
   if(kind==='charger'&&this.enemies.filter(e=>e.kind==='charger').length>=4+Math.floor(this.time/1200))kind='hollow';if(kind==='seer'&&this.enemies.filter(e=>e.kind==='seer').length>=3)kind='armored';
   if(x===undefined||y===undefined){const point=this.spawnPoint();x=point.x;y=point.y;}
-  const s=ENEMIES[kind],d=DIFFICULTIES[this.config.difficulty],scale=(isBoss(kind)?1+Math.max(0,this.time-240)/1000:enemyScaling(this.time))*d.hp;
-  const e:Enemy={id:this.nextId++,kind,x,y,hp:s.hp*scale,maxHp:s.hp*scale,speed:s.speed*d.speed*(1+Math.min(.25,this.time/24000)),damage:s.damage*d.damage*(1+this.time/3600),radius:s.radius,slow:0,flash:0,attack:isBoss(kind)?2.5:this.rng.between(1,3),orbHit:0,orbitHits:{},facing:1,chargeX:0,chargeY:0,charge:0,marks:0,dots:{},summoned};this.enemies.push(e);return e;
+  const s=ENEMIES[kind],d=DIFFICULTIES[this.config.difficulty],power=floorDifficulty(this.floor),localTime=this.floorProgress*FLOOR_RULES.duration,scale=enemyScaling(localTime)*d.hp*power.hp;
+  const e:Enemy={id:this.nextId++,kind,x,y,hp:s.hp*scale,maxHp:s.hp*scale,speed:s.speed*d.speed*power.speed,damage:s.damage*d.damage*power.damage*(1+localTime/3600),radius:s.radius,slow:0,flash:0,attack:isBoss(kind)?2.5:this.rng.between(1,3),orbHit:0,orbitHits:{},facing:1,chargeX:0,chargeY:0,charge:0,marks:0,dots:{},summoned};this.enemies.push(e);return e;
+ }
+ private finishFloor(){
+  this.time+=this.floorDuration-this.floorTime;
+  this.floorTime=this.floorDuration;this.completedFloors=this.floor;this.status='floorReward';
+  // Bank uncollected crystals before the arena is cleared; healing drops are not auto-consumed.
+  for(const drop of this.loot)if(!drop.heal)this.xp+=drop.value*(1+this.build.passives.magnet*.04+this.mastery('soulhunter')*.06);
+  this.enemies=[];this.projectiles=[];this.warnings=[];this.loot=[];this.grid.rebuild([]);this.offers=[];
+  this.player.moving=false;this.player.dashLeft=0;this.rage=0;this.events=[];
+  this.rewardOffers=choices(this.build,this.rng,this.config,this.build.passives.fortune*.015+this.config.permanent.luck*.01);
+  this.chosenReward=null;this.emit('floor-complete');
+ }
+ selectFloorReward(index:number){
+  if(this.status!=='floorReward'||!Number.isInteger(index)||!this.rewardOffers[index])return false;
+  this.chosenReward=structuredClone(this.rewardOffers[index]);this.applyUpgrade(this.chosenReward);
+  this.rewardOffers=[];this.status='floorReady';return true;
+ }
+ startNextFloor(){
+  if(this.status!=='floorReady')return false;
+  this.floor++;this.floorTime=0;this.chosenReward=null;this.status='playing';this.nextFormation=FLOOR_RULES.firstFormation;this.spawnClock=6;
+  this.player.x=WORLD.width/2;this.player.y=WORLD.height/2;this.player.moving=false;this.player.dashLeft=0;this.player.invulnerable=0;
+  this.nextChoiceAt=Math.max(this.nextChoiceAt,this.time+FLOOR_RULES.nextFloorGrace);this.spawnOpening();this.emit('floor-start');return true;
  }
  private spawnPoint(){
   const angle=this.rng.between(0,Math.PI*2),radius=this.rng.between(RULES.openingRadius,RULES.openingRadius+180);
@@ -70,7 +101,8 @@ export class Engine {
   return{x:this.player.x<WORLD.width/2?WORLD.width-40:40,y:this.player.y<WORLD.height/2?WORLD.height-40:40};
  }
  step(dt:number,input:Input){
-  if(this.status!=='playing'||!Number.isFinite(dt)||dt<=0)return;dt=Math.min(.05,dt);this.time+=dt;const p=this.player;
+  if(this.status!=='playing'||!Number.isFinite(dt)||dt<=0)return;dt=Math.min(.05,dt,this.floorRemaining);this.time+=dt;this.floorTime=Math.min(this.floorDuration,this.floorTime+dt);
+  if(this.floorRemaining<1e-8){this.finishFloor();return;}const p=this.player;
   if(this.eclipse!==this.eclipseWas){this.eclipseWas=this.eclipse;this.emit('eclipse',undefined,undefined,{value:this.eclipse?1:0});}
   p.invulnerable=Math.max(0,p.invulnerable-dt);p.dashCooldown=Math.max(0,p.dashCooldown-dt);p.hp=Math.min(p.maxHp,p.hp+this.build.passives.regen*.18*dt);
   const leechRate=this.build.passives.leech*.18+(WEAPON_IDS.some(id=>this.build.weapons[id]>0&&WEAPONS[id].leech)?.35:0)+(WEAPON_IDS.some(id=>this.build.weapons[id]===RULES.weaponMax&&WEAPONS[id].kind==='orbit')?.3:0);this.healBudget=Math.min(leechRate*2,this.healBudget+leechRate*dt);
@@ -79,9 +111,8 @@ export class Engine {
   this.rage=clamp(this.rage+(this.grid.query(p.x,p.y,160).length>=3?.5:-.24)*dt,0,1);
   if(input.dash&&p.dashCooldown===0){p.dashCooldown=this.dashCooldown;p.dashLeft=RULES.dashDuration;p.invulnerable=.43;this.emit('dash',p.x,p.y,{radius:135});for(const e of this.grid.query(p.x,p.y,135)){this.hit(e,RULES.dashDamage*(1+this.mastery('soulwarrior')*.1)*(this.eclipse?1.3:1),'dash');if(this.config.classId==='mage')e.slow=1.4;}}
   const dashing=p.dashLeft>0;p.x=clamp(p.x+(dashing?p.directionX:dx)*(dashing?RULES.dashSpeed:this.playerSpeed)*dt,32,WORLD.width-32);p.y=clamp(p.y+(dashing?p.directionY:dy)*(dashing?RULES.dashSpeed:this.playerSpeed)*dt,32,WORLD.height-32);p.dashLeft=Math.max(0,p.dashLeft-dt);p.moving=length>0||dashing;
-  this.spawnClock-=dt;if(this.spawnClock<=0){this.spawnClock+=spawnInterval(this.time);this.spawn();if(this.enemies.length<targetPopulation(this.time))this.spawn();}
-  if(this.time>=this.nextFormation){this.nextFormation+=45;const gap=this.rng.between(0,Math.PI*2);for(let i=0;i<15;i++){const a=gap+.7+i/15*(Math.PI*2-1.4);const x=clamp(p.x+Math.cos(a)*720,40,WORLD.width-40),y=clamp(p.y+Math.sin(a)*720,40,WORLD.height-40);if(Math.hypot(x-p.x,y-p.y)<430)continue;const kind:EnemyKind=this.time>=7200?(i%3===0?'reaper':'armored'):this.time>=3600?(i%5===0?'seer':i%3===0?'reaper':'armored'):this.time>=1800?(i%4===0?'charger':'armored'):i%4===0?'armored':'hollow';this.spawn(kind,x,y);}this.emit('formation');}
-  if(this.time>=this.nextBoss){if(this.enemies.length>=RULES.enemyCap){const i=this.enemies.findIndex(e=>!isBoss(e.kind));if(i>=0)this.enemies.splice(i,1);}const n=Math.floor(this.nextBoss/240)-1;this.spawn(BOSSES[n%3]);this.nextBoss+=240;this.bossSpawned=true;this.emit('boss');}
+  this.spawnClock-=dt;if(this.spawnClock<=0){this.spawnClock+=floorSpawnInterval(this.floor,this.floorProgress);this.spawn();if(this.enemies.length<floorPopulation(this.floor,this.floorProgress))this.spawn();}
+  if(this.floorProgress*FLOOR_RULES.duration>=this.nextFormation){this.nextFormation+=FLOOR_RULES.formationInterval;const gap=this.rng.between(0,Math.PI*2);for(let i=0;i<15;i++){const a=gap+.7+i/15*(Math.PI*2-1.4);const x=clamp(p.x+Math.cos(a)*720,40,WORLD.width-40),y=clamp(p.y+Math.sin(a)*720,40,WORLD.height-40);if(Math.hypot(x-p.x,y-p.y)<430)continue;const kind:EnemyKind=this.encounterTime>=7200?(i%3===0?'reaper':'armored'):this.encounterTime>=3600?(i%5===0?'seer':i%3===0?'reaper':'armored'):this.encounterTime>=1800?(i%4===0?'charger':'armored'):i%4===0?'armored':'hollow';this.spawn(kind,x,y);}this.emit('formation');}
   this.updateEnemies(dt);this.grid.rebuild(this.enemies.filter(e=>e.hp>0));if(this.status!=='playing')return;
   this.updateWeapons(dt);this.updateProjectiles(dt);this.updateWarnings(dt);this.updateLoot(dt);this.enemies=this.enemies.filter(e=>e.hp>0);
  }
@@ -130,10 +161,10 @@ export class Engine {
  hurt(damage:number){const p=this.player;if(p.invulnerable>0||this.status!=='playing')return;const actual=damage*(1-reduction(this.defense));p.hp=Math.max(0,p.hp-actual);p.invulnerable=RULES.invulnerability;this.emit('hurt',p.x,p.y,{value:Math.round(actual)});if(p.hp<=0){this.status='dead';this.emit('dead');}}
  snapshot(){const {grid,events,rng,...rest}=this;return JSON.parse(JSON.stringify({...rest,seed:rng.seed,projectiles:this.projectiles.map(p=>({...p,hit:[...p.hit]}))}));}
  static restore(value:unknown):Engine|undefined {try{
-  const v=structuredClone(value) as Record<string,any>;if(!v||!v.config||!['playing','paused','upgrade'].includes(v.status)||!Number.isFinite(v.time)||v.time<0||v.time>1e7)return;
-  const legacy=v.balanceVersion===undefined;
-  if(legacy&&v.build?.weapons){v.balanceVersion=3;v.nextChoiceAt=v.time;for(const id of WEAPON_IDS){const old=v.build.weapons[id];if(!Number.isInteger(old)||old<0||old>12)return;v.build.weapons[id]=old?Math.ceil(1+(old-1)*7/11):0;}}
-  if(v.balanceVersion!==3)return;
+  const v=structuredClone(value) as Record<string,any>;if(!v||!v.config||!['playing','paused','upgrade','floorReward','floorReady'].includes(v.status)||!Number.isFinite(v.time)||v.time<0||v.time>1e7)return;
+  if(v.balanceVersion!==4)return;
+  if(!Number.isInteger(v.floor)||v.floor<1||!Number.isInteger(v.completedFloors)||v.completedFloors<0||!Number.isFinite(v.floorDuration)||v.floorDuration<FLOOR_RULES.minimumTestDuration||v.floorDuration>FLOOR_RULES.duration||!Number.isFinite(v.floorTime)||v.floorTime<0||v.floorTime>v.floorDuration||v.time<v.floorTime)return;
+  const between=v.status==='floorReward'||v.status==='floorReady';if(v.completedFloors!==(between?v.floor:v.floor-1)||(between&&v.floorTime!==v.floorDuration))return;
   const c=v.config as RunConfig;if(!Object.hasOwn(CLASSES,c.classId)||!Number.isInteger(c.difficulty)||!DIFFICULTIES[c.difficulty]||!WEAPON_IDS.includes(c.startWeapon)||!Array.isArray(c.weapons)||!Array.isArray(c.passives)||!Array.isArray(c.masteries))return;
   if(c.weapons.some(id=>!WEAPON_IDS.includes(id))||c.passives.some(id=>!PASSIVE_IDS.includes(id)))return;
   const finiteTree=(x:unknown):boolean=>typeof x==='number'?Number.isFinite(x)&&Math.abs(x)<1e14:Array.isArray(x)?x.every(finiteTree):x&&typeof x==='object'?Object.values(x).every(finiteTree):true;if(!finiteTree(v))return;
@@ -142,13 +173,13 @@ export class Engine {
   if(WEAPON_IDS.some(id=>!Number.isInteger(v.build.weapons[id])||v.build.weapons[id]<0||v.build.weapons[id]>RULES.weaponMax)||PASSIVE_IDS.some(id=>!Number.isInteger(v.build.passives[id])||v.build.passives[id]<0||v.build.passives[id]>8))return;
   const e=new Engine(1,c);
   const matches=(shape:any,input:any):boolean=>{if(typeof shape==='number')return typeof input==='number'&&Number.isFinite(input);if(typeof shape==='boolean')return typeof input==='boolean';if(typeof shape==='string')return typeof input==='string';if(Array.isArray(shape))return Array.isArray(input);if(shape&&typeof shape==='object')return input&&typeof input==='object'&&Object.keys(shape).every(k=>matches(shape[k],input[k]));return true;};
-  for(const key of Object.keys(e)){if(['grid','events','rng','enemies','projectiles','loot','warnings','offers','config'].includes(key))continue;if(!matches((e as any)[key],v[key]))return;}
-  if(v.gold<0||v.souls<0||v.creditedGold<0||v.creditedSouls<0||v.nextBoss<=v.time-240||v.nextId<1)return;
+  for(const key of Object.keys(e)){if(['grid','events','rng','enemies','projectiles','loot','warnings','offers','rewardOffers','chosenReward','config'].includes(key))continue;if(!matches((e as any)[key],v[key]))return;}
+  if(v.gold<0||v.souls<0||v.creditedGold<0||v.creditedSouls<0||v.nextId<1)return;
   if(!matches(defaultRunConfig().permanent,c.permanent)||!matches(defaultRunConfig().masteryLevels,c.masteryLevels)||!Number.isInteger(v.seed)||v.creditedGold>Math.floor(v.gold)||v.creditedSouls>v.souls)return;
   for(const t of v.enemies){if(!t.orbitHits)t.orbitHits={};if(!matches({id:0,x:0,y:0,hp:0,maxHp:0,radius:0,speed:0,damage:0,slow:0,flash:0,attack:0,orbHit:0,facing:0,chargeX:0,chargeY:0,charge:0,marks:0,summoned:false},t))return;for(const [key,d] of Object.entries(t.dots) as [string,any][]){if(!['burn','bleed','poison'].includes(key)||!matches({left:0,dps:0,source:''},d)||!WEAPON_IDS.includes(d.source))return;}}
   for(const l of v.loot)if(!matches({id:0,x:0,y:0,value:0,heal:false},l))return;
   for(const w of v.warnings)if(!matches({id:0,x:0,y:0,radius:0,remaining:0,duration:0,damage:0,source:0},w))return;
   for(const p of v.projectiles)if(!matches({id:0,x:0,y:0,vx:0,vy:0,damage:0,enemy:false,life:0,radius:0,target:0,pierce:0},p)||p.enemy!==false)return;
-  for(const key of Object.keys(e)){if(['grid','events','rng','config'].includes(key))continue;if(Object.hasOwn(v,key))(e as any)[key]=v[key];}e.rng=new Random(v.seed>>>0);e.projectiles=v.projectiles.map((p:any)=>({...p,hit:new Set(p.hit)}));e.events=[];e.grid.rebuild(e.enemies);if(e.status!=='upgrade')e.status='paused';if(e.status==='upgrade'&&(!Array.isArray(e.offers)||e.offers.length!==3||e.offers.some(o=>!o||!['common','rare','epic'].includes(o.rarity)||!Number.isFinite(o.bonus)||(!WEAPON_IDS.includes(o.id as WeaponId)&&!PASSIVE_IDS.includes(o.id as PassiveId))||(o.recovery&&!['heal','vitality','power'].includes(o.recovery)))))return;if(legacy&&e.status==='upgrade'&&e.offers.some(o=>o.id in WEAPONS&&e.build.weapons[o.id as WeaponId]>=RULES.weaponMax))e.offers=choices(e.build,e.rng,e.config,e.build.passives.fortune*.015+e.config.permanent.luck*.01);return e;
+  for(const key of Object.keys(e)){if(['grid','events','rng','config'].includes(key))continue;if(Object.hasOwn(v,key))(e as any)[key]=v[key];}e.rng=new Random(v.seed>>>0);e.projectiles=v.projectiles.map((p:any)=>({...p,hit:new Set(p.hit)}));e.events=[];e.grid.rebuild(e.enemies);if(e.status==='playing')e.status='paused';if(e.status==='upgrade'&&(!Array.isArray(e.offers)||e.offers.length!==3||e.offers.some(o=>!o||!['common','rare','epic'].includes(o.rarity)||!Number.isFinite(o.bonus)||(!WEAPON_IDS.includes(o.id as WeaponId)&&!PASSIVE_IDS.includes(o.id as PassiveId))||(o.recovery&&!['heal','vitality','power'].includes(o.recovery)))))return;const validReward=(o:any)=>o&&['common','rare','epic'].includes(o.rarity)&&Number.isInteger(o.bonus)&&o.bonus>=0&&o.bonus<=2&&(WEAPON_IDS.includes(o.id)||PASSIVE_IDS.includes(o.id))&&(!o.recovery||['heal','vitality','power'].includes(o.recovery));if(!Array.isArray(e.rewardOffers)||e.rewardOffers.some(o=>!validReward(o))||(e.chosenReward!==null&&!validReward(e.chosenReward)))return;if(e.status==='floorReward'&&(e.rewardOffers.length!==3||e.chosenReward!==null))return;if(e.status==='floorReady'&&(e.rewardOffers.length!==0||e.chosenReward===null))return;if(!between&&(e.rewardOffers.length!==0||e.chosenReward!==null))return;return e;
  }catch{return;}}
 }

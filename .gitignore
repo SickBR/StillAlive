@@ -40,3 +40,7 @@ playwright-report/
 .DS_Store
 Thumbs.db
 Desktop.ini
+
+# V3 worktree-local generated caches and verification artifacts
+.vite-cache/
+reports/

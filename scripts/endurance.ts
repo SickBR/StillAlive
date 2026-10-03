@@ -8,11 +8,11 @@ for(const cls of CLASS_IDS){
  const e=new Engine(100,runConfig(profile));for(const id of preset.weapons)e.build.weapons[id]=8;for(const id of preset.passives)e.build.passives[id]=8;e.player.hp=e.player.maxHp=1000000; // Explicit stress harness, not a survival/balance result.
  let maxEnemies=0,maxShots=0,maxLoot=0,checkpoints=0;const start=performance.now();
  for(let tick=0;tick<10800*20;tick++){
-  e.player.invulnerable=1;e.step(.05,{x:Math.cos(e.time*.2),y:Math.sin(e.time*.2),dash:tick%160===0});e.drainEvents();maxEnemies=Math.max(maxEnemies,e.enemies.length);maxShots=Math.max(maxShots,e.projectiles.length);maxLoot=Math.max(maxLoot,e.loot.length);
+  if(e.status==='floorReward')e.selectFloorReward(0);if(e.status==='floorReady')e.startNextFloor();e.player.invulnerable=1;e.step(.05,{x:Math.cos(e.time*.2),y:Math.sin(e.time*.2),dash:tick%160===0});e.drainEvents();maxEnemies=Math.max(maxEnemies,e.enemies.length);maxShots=Math.max(maxShots,e.projectiles.length);maxLoot=Math.max(maxLoot,e.loot.length);
   if(tick%12000===0){if(!Engine.restore(e.snapshot()))throw new Error('Checkpoint invalid at '+e.time);checkpoints++;}
   if(e.status==='upgrade')e.selectUpgrade(0);if(!Number.isFinite(e.damageDealt))throw new Error('Non-finite damage');
  }
  const result={classId:cls,simulatedSeconds:Math.round(e.time),bosses:e.bossKills,level:e.level,kills:e.kills,maxEnemies,maxShots,maxLoot,checkpoints,wallMs:Math.round(performance.now()-start)};console.log(JSON.stringify(result));results.push(result);
 }
 const difficulties=DIFFICULTIES.map((d,i)=>{const p=freshProfile();p.difficulty=i;const e=new Engine(7,runConfig(p));e.enemies=[];const b=e.spawn('boss')!;e.hit(b,1e9,'longsword');return{name:d.name,bossHp:b.maxHp,bossDamage:b.damage,gold:e.gold,souls:e.souls};});
-writeFileSync('reports/endurance-v21.json',JSON.stringify({note:'Three full 3-hour simulations at 20 Hz, prebuilt maximum class loadouts and artificial immunity/HP for stress only. Not proof of human survivability or balance.',results,difficulties},null,2));
+writeFileSync('reports/endurance-v3-step1.json',JSON.stringify({note:'Three full 3-hour simulations at 20 Hz, prebuilt maximum class loadouts and artificial immunity/HP for stress only. Not proof of human survivability or balance.',results,difficulties},null,2));

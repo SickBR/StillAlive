@@ -1,6 +1,6 @@
 {
   "name": "eclipse-survivor",
-  "version": "2.1.0",
+  "version": "3.0.0-step1",
   "private": true,
   "type": "module",
   "engines": {
@@ -12,7 +12,7 @@
     "preview": "vite preview --host 127.0.0.1",
     "test": "tsx --test tests/*.test.ts",
     "simulate": "tsx scripts/simulate.ts",
-    "test:browser": "node scripts/browser-test.mjs",
+    "test:browser": "node scripts/browser-floors.mjs",
     "test:endurance": "tsx scripts/endurance.ts",
     "test:production": "node scripts/production-smoke.mjs",
     "docs": "tsx scripts/describe.ts"

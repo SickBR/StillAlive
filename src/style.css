@@ -28,3 +28,5 @@
 @media(prefers-reduced-motion:reduce){.hero-idle,.hero-aura,.ember-field i{animation:none}}
 
 .sanctuary-footer .compact-arena{display:none}@media(max-width:900px){.sanctuary-footer .compact-arena{display:block}}
+
+.sanctuary-brand h1{font-size:clamp(25px,3vw,38px);letter-spacing:4px}

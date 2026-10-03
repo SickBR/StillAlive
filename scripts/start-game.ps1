@@ -51,9 +51,18 @@ try {
         if ($LASTEXITCODE -ne 0) { throw 'Installation fehlgeschlagen. Internetverbindung und die Meldungen oben pruefen.' }
     }
 
-    Write-Host 'ECLIPSE SURVIVOR wird im Browser geoeffnet.'
+    $gameUrl = 'http://127.0.0.1:5183/'
+    $running = $null
+    try { $running = Invoke-WebRequest -Uri $gameUrl -UseBasicParsing -TimeoutSec 2 } catch { }
+    if ($running -and $running.Content.Contains('<title>STILLALIVE V3</title>')) {
+        Write-Host 'STILLALIVE V3 laeuft bereits. Der Browser wird geoeffnet.'
+        Start-Process -FilePath $gameUrl -WindowStyle Hidden
+        exit 0
+    }
+    Write-Host 'STILLALIVE V3 wird im Browser geoeffnet.'
+
     Write-Host 'Dieses Fenster waehrend des Spielens offen lassen. Zum Beenden das Fenster schliessen.'
-    & $nodePath $vitePath --host 127.0.0.1 --port 5173 --open
+    & $nodePath $vitePath --host 127.0.0.1 --port 5183 --strictPort --open
     exit $LASTEXITCODE
 } catch {
     Write-Host $_.Exception.Message -ForegroundColor Red
