@@ -40,3 +40,15 @@ playwright-report/
 .DS_Store
 Thumbs.db
 Desktop.ini
+
+# Separate Git worktrees and local authentication files
+.worktrees/
+.netrc
+_netrc
+.npmrc
+
+# Local savegame exports
+saves/
+savegames/
+*.sav
+*.save
