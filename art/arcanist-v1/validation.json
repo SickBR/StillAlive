@@ -1,0 +1,16 @@
+{
+  "imageSize": [
+    1088,
+    64
+  ],
+  "frames": 17,
+  "opaquePaletteColors": 32,
+  "alphaValues": [
+    0,
+    255
+  ],
+  "allFramesContained": true,
+  "footBaselineInclusive": 54,
+  "duplicateFramePairs": [],
+  "sourcePoseCount": 17
+}

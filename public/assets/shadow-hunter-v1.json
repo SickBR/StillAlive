@@ -1,0 +1,60 @@
+{
+  "textureKey": "shadow-hunter-v1",
+  "image": "assets/shadow-hunter-v1.png",
+  "frameWidth": 64,
+  "frameHeight": 64,
+  "sheetWidth": 1088,
+  "sheetHeight": 64,
+  "frameCount": 17,
+  "margin": 0,
+  "spacing": 0,
+  "footAnchor": {
+    "x": 32,
+    "y": 54
+  },
+  "recommendedOrigin": {
+    "x": 0.5,
+    "y": 0.84375
+  },
+  "direction": "southeast; horizontal flip for southwest",
+  "animations": [
+    {
+      "key": "shadow-hunter-idle",
+      "start": 0,
+      "end": 1,
+      "frameRate": 3,
+      "repeat": -1
+    },
+    {
+      "key": "shadow-hunter-walk",
+      "start": 2,
+      "end": 5,
+      "frameRate": 10,
+      "repeat": -1
+    },
+    {
+      "key": "shadow-hunter-hit",
+      "start": 6,
+      "end": 6,
+      "frameRate": 8,
+      "repeat": 0
+    },
+    {
+      "key": "shadow-hunter-death",
+      "start": 7,
+      "end": 10,
+      "frameRate": 7,
+      "repeat": 0
+    },
+    {
+      "key": "shadow-hunter-attack",
+      "start": 11,
+      "end": 16,
+      "frameRate": 12,
+      "repeat": 0
+    }
+  ],
+  "hitHoldMs": 125,
+  "attackReleaseFrame": 15,
+  "deathFinalFrame": 10
+}
