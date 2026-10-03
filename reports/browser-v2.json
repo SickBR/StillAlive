@@ -1,0 +1,37 @@
+{
+  "checks": [
+    "All management pages open",
+    "Class selection, preset copy, editing and settings persist",
+    "Real movement, dash, pause, full checkpoint and reload",
+    "Three level cards and keyboard selection",
+    "Boss telegraph, reward and continuing Endless combat",
+    "Death ends and banks exactly one run",
+    "Weapon, mastery and permanent purchases via actual buttons",
+    "300-enemy, eight-weapon browser load scenario",
+    "Retirement, clean restarts and stable scene object count",
+    "Corrupt save recovery and compact desktop layout"
+  ],
+  "errors": [],
+  "failed": [],
+  "performance": {
+    "medianFrameMs": 50,
+    "p95FrameMs": 50.100000000000364,
+    "objects": {
+      "images": 329,
+      "pooled": 6,
+      "effects": 31,
+      "labels": 55,
+      "displayObjects": 506
+    },
+    "enemies": 295,
+    "projectiles": 0
+  },
+  "restartObjects": [
+    506,
+    506,
+    506,
+    506,
+    506
+  ],
+  "note": "Chromium SwiftShader. UI controls real; bosses, economy resources and load state injected through development-only QA hook."
+}

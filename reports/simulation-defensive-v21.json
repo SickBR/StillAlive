@@ -1,0 +1,973 @@
+{
+  "note": "9 new-profile bots, 20 Hz, 30-minute upper bound; defensive upgrade preference and charge avoidance. No stat boosts or immunity. Limited heuristic, not a human balance verdict.",
+  "results": [
+    {
+      "classId": "warrior",
+      "seed": 12,
+      "status": "dead",
+      "time": 1431,
+      "level": 11,
+      "kills": 457,
+      "bosses": 2,
+      "gold": 764,
+      "souls": 7,
+      "hp": 0,
+      "maxEnemies": 216,
+      "maxProjectiles": 0,
+      "choiceTimes": [
+        47.75,
+        79.85,
+        180.75,
+        370.65,
+        635.05,
+        815.7,
+        1090.25,
+        1143.35,
+        1350.85,
+        1371.9
+      ],
+      "minimumChoiceGap": 21.050000000000182,
+      "minutes": [
+        {
+          "minute": 1,
+          "level": 2,
+          "kills": 30,
+          "gold": 30,
+          "hp": 140
+        },
+        {
+          "minute": 2,
+          "level": 3,
+          "kills": 55,
+          "gold": 58,
+          "hp": 155
+        },
+        {
+          "minute": 3,
+          "level": 3,
+          "kills": 68,
+          "gold": 71,
+          "hp": 141
+        },
+        {
+          "minute": 4,
+          "level": 4,
+          "kills": 72,
+          "gold": 75,
+          "hp": 157
+        },
+        {
+          "minute": 5,
+          "level": 4,
+          "kills": 80,
+          "gold": 83,
+          "hp": 157
+        },
+        {
+          "minute": 6,
+          "level": 4,
+          "kills": 103,
+          "gold": 95,
+          "hp": 146
+        },
+        {
+          "minute": 7,
+          "level": 5,
+          "kills": 109,
+          "gold": 101,
+          "hp": 157
+        },
+        {
+          "minute": 8,
+          "level": 5,
+          "kills": 124,
+          "gold": 114,
+          "hp": 157
+        },
+        {
+          "minute": 9,
+          "level": 5,
+          "kills": 150,
+          "gold": 123,
+          "hp": 142
+        },
+        {
+          "minute": 10,
+          "level": 5,
+          "kills": 152,
+          "gold": 125,
+          "hp": 142
+        },
+        {
+          "minute": 11,
+          "level": 6,
+          "kills": 162,
+          "gold": 132,
+          "hp": 143
+        },
+        {
+          "minute": 12,
+          "level": 6,
+          "kills": 166,
+          "gold": 134,
+          "hp": 143
+        },
+        {
+          "minute": 13,
+          "level": 6,
+          "kills": 192,
+          "gold": 170,
+          "hp": 127
+        },
+        {
+          "minute": 14,
+          "level": 7,
+          "kills": 213,
+          "gold": 185,
+          "hp": 128
+        },
+        {
+          "minute": 15,
+          "level": 7,
+          "kills": 217,
+          "gold": 188,
+          "hp": 128
+        },
+        {
+          "minute": 16,
+          "level": 7,
+          "kills": 221,
+          "gold": 192,
+          "hp": 128
+        },
+        {
+          "minute": 17,
+          "level": 7,
+          "kills": 228,
+          "gold": 199,
+          "hp": 128
+        },
+        {
+          "minute": 18,
+          "level": 7,
+          "kills": 263,
+          "gold": 259,
+          "hp": 39
+        },
+        {
+          "minute": 19,
+          "level": 8,
+          "kills": 303,
+          "gold": 448,
+          "hp": 30
+        },
+        {
+          "minute": 20,
+          "level": 9,
+          "kills": 340,
+          "gold": 477,
+          "hp": 66
+        },
+        {
+          "minute": 21,
+          "level": 9,
+          "kills": 343,
+          "gold": 478,
+          "hp": 66
+        },
+        {
+          "minute": 22,
+          "level": 9,
+          "kills": 356,
+          "gold": 487,
+          "hp": 66
+        },
+        {
+          "minute": 23,
+          "level": 11,
+          "kills": 429,
+          "gold": 740,
+          "hp": 22
+        }
+      ],
+      "simulationMs": 4458,
+      "weapons": {
+        "blade": 0,
+        "orb": 1,
+        "fire": 0,
+        "frost": 0,
+        "lightning": 0,
+        "longsword": 2,
+        "axe": 3,
+        "spear": 0,
+        "hammer": 0,
+        "dual": 0,
+        "blood": 0,
+        "scythe": 0,
+        "firestaff": 0,
+        "froststaff": 0,
+        "arcanestaff": 0,
+        "stormstaff": 0,
+        "meteorstaff": 0,
+        "shadowstaff": 0,
+        "soulbook": 0,
+        "hunting": 0,
+        "shortbow": 0,
+        "crossbow": 0,
+        "longbow": 0,
+        "poisonbow": 0,
+        "scatterbow": 0,
+        "shadowbow": 0
+      }
+    },
+    {
+      "classId": "warrior",
+      "seed": 71,
+      "status": "dead",
+      "time": 403,
+      "level": 8,
+      "kills": 282,
+      "bosses": 0,
+      "gold": 320,
+      "souls": 0,
+      "hp": 0,
+      "maxEnemies": 132,
+      "maxProjectiles": 0,
+      "choiceTimes": [
+        63.2,
+        92,
+        144.9,
+        184.75,
+        233.45,
+        292.3,
+        355.6
+      ],
+      "minimumChoiceGap": 28.799999999999997,
+      "minutes": [
+        {
+          "minute": 1,
+          "level": 1,
+          "kills": 16,
+          "gold": 16,
+          "hp": 125
+        },
+        {
+          "minute": 2,
+          "level": 3,
+          "kills": 54,
+          "gold": 61,
+          "hp": 118
+        },
+        {
+          "minute": 3,
+          "level": 4,
+          "kills": 88,
+          "gold": 103,
+          "hp": 119
+        },
+        {
+          "minute": 4,
+          "level": 6,
+          "kills": 125,
+          "gold": 154,
+          "hp": 74
+        },
+        {
+          "minute": 5,
+          "level": 7,
+          "kills": 170,
+          "gold": 203,
+          "hp": 29
+        },
+        {
+          "minute": 6,
+          "level": 8,
+          "kills": 228,
+          "gold": 258,
+          "hp": 36
+        }
+      ],
+      "simulationMs": 529,
+      "weapons": {
+        "blade": 0,
+        "orb": 1,
+        "fire": 0,
+        "frost": 0,
+        "lightning": 0,
+        "longsword": 2,
+        "axe": 2,
+        "spear": 2,
+        "hammer": 0,
+        "dual": 0,
+        "blood": 0,
+        "scythe": 0,
+        "firestaff": 0,
+        "froststaff": 0,
+        "arcanestaff": 0,
+        "stormstaff": 0,
+        "meteorstaff": 0,
+        "shadowstaff": 0,
+        "soulbook": 0,
+        "hunting": 0,
+        "shortbow": 0,
+        "crossbow": 0,
+        "longbow": 0,
+        "poisonbow": 0,
+        "scatterbow": 0,
+        "shadowbow": 0
+      }
+    },
+    {
+      "classId": "warrior",
+      "seed": 313,
+      "status": "dead",
+      "time": 1433,
+      "level": 6,
+      "kills": 201,
+      "bosses": 0,
+      "gold": 173,
+      "souls": 0,
+      "hp": 0,
+      "maxEnemies": 216,
+      "maxProjectiles": 0,
+      "choiceTimes": [
+        41,
+        76.9,
+        98.9,
+        269.6,
+        699.05
+      ],
+      "minimumChoiceGap": 22,
+      "minutes": [
+        {
+          "minute": 1,
+          "level": 2,
+          "kills": 34,
+          "gold": 34,
+          "hp": 133
+        },
+        {
+          "minute": 2,
+          "level": 4,
+          "kills": 68,
+          "gold": 69,
+          "hp": 133
+        },
+        {
+          "minute": 3,
+          "level": 4,
+          "kills": 83,
+          "gold": 84,
+          "hp": 140
+        },
+        {
+          "minute": 4,
+          "level": 4,
+          "kills": 90,
+          "gold": 91,
+          "hp": 140
+        },
+        {
+          "minute": 5,
+          "level": 5,
+          "kills": 102,
+          "gold": 101,
+          "hp": 123
+        },
+        {
+          "minute": 6,
+          "level": 5,
+          "kills": 107,
+          "gold": 106,
+          "hp": 118
+        },
+        {
+          "minute": 7,
+          "level": 5,
+          "kills": 112,
+          "gold": 111,
+          "hp": 140
+        },
+        {
+          "minute": 8,
+          "level": 5,
+          "kills": 126,
+          "gold": 118,
+          "hp": 140
+        },
+        {
+          "minute": 9,
+          "level": 5,
+          "kills": 135,
+          "gold": 123,
+          "hp": 140
+        },
+        {
+          "minute": 10,
+          "level": 5,
+          "kills": 139,
+          "gold": 127,
+          "hp": 140
+        },
+        {
+          "minute": 11,
+          "level": 5,
+          "kills": 144,
+          "gold": 130,
+          "hp": 140
+        },
+        {
+          "minute": 12,
+          "level": 6,
+          "kills": 151,
+          "gold": 135,
+          "hp": 146
+        },
+        {
+          "minute": 13,
+          "level": 6,
+          "kills": 152,
+          "gold": 136,
+          "hp": 155
+        },
+        {
+          "minute": 14,
+          "level": 6,
+          "kills": 159,
+          "gold": 140,
+          "hp": 155
+        },
+        {
+          "minute": 15,
+          "level": 6,
+          "kills": 161,
+          "gold": 142,
+          "hp": 155
+        },
+        {
+          "minute": 16,
+          "level": 6,
+          "kills": 163,
+          "gold": 144,
+          "hp": 155
+        },
+        {
+          "minute": 17,
+          "level": 6,
+          "kills": 165,
+          "gold": 146,
+          "hp": 150
+        },
+        {
+          "minute": 18,
+          "level": 6,
+          "kills": 168,
+          "gold": 150,
+          "hp": 155
+        },
+        {
+          "minute": 19,
+          "level": 6,
+          "kills": 168,
+          "gold": 150,
+          "hp": 155
+        },
+        {
+          "minute": 20,
+          "level": 6,
+          "kills": 184,
+          "gold": 165,
+          "hp": 151
+        },
+        {
+          "minute": 21,
+          "level": 6,
+          "kills": 186,
+          "gold": 166,
+          "hp": 155
+        },
+        {
+          "minute": 22,
+          "level": 6,
+          "kills": 189,
+          "gold": 168,
+          "hp": 155
+        },
+        {
+          "minute": 23,
+          "level": 6,
+          "kills": 190,
+          "gold": 169,
+          "hp": 155
+        }
+      ],
+      "simulationMs": 4035,
+      "weapons": {
+        "blade": 0,
+        "orb": 0,
+        "fire": 0,
+        "frost": 0,
+        "lightning": 0,
+        "longsword": 1,
+        "axe": 0,
+        "spear": 0,
+        "hammer": 0,
+        "dual": 0,
+        "blood": 0,
+        "scythe": 0,
+        "firestaff": 0,
+        "froststaff": 0,
+        "arcanestaff": 0,
+        "stormstaff": 0,
+        "meteorstaff": 0,
+        "shadowstaff": 0,
+        "soulbook": 0,
+        "hunting": 0,
+        "shortbow": 0,
+        "crossbow": 0,
+        "longbow": 0,
+        "poisonbow": 0,
+        "scatterbow": 0,
+        "shadowbow": 0
+      }
+    },
+    {
+      "classId": "mage",
+      "seed": 12,
+      "status": "dead",
+      "time": 137,
+      "level": 7,
+      "kills": 291,
+      "bosses": 0,
+      "gold": 365,
+      "souls": 0,
+      "hp": 0,
+      "maxEnemies": 58,
+      "maxProjectiles": 3,
+      "choiceTimes": [
+        18.5,
+        38.55,
+        58.6,
+        78.65,
+        98.7,
+        118.75
+      ],
+      "minimumChoiceGap": 20.049999999999997,
+      "minutes": [
+        {
+          "minute": 1,
+          "level": 4,
+          "kills": 118,
+          "gold": 118,
+          "hp": 89
+        },
+        {
+          "minute": 2,
+          "level": 7,
+          "kills": 258,
+          "gold": 310,
+          "hp": 64
+        }
+      ],
+      "simulationMs": 100,
+      "weapons": {
+        "blade": 0,
+        "orb": 0,
+        "fire": 0,
+        "frost": 0,
+        "lightning": 0,
+        "longsword": 0,
+        "axe": 0,
+        "spear": 0,
+        "hammer": 0,
+        "dual": 0,
+        "blood": 0,
+        "scythe": 0,
+        "firestaff": 2,
+        "froststaff": 0,
+        "arcanestaff": 3,
+        "stormstaff": 0,
+        "meteorstaff": 0,
+        "shadowstaff": 0,
+        "soulbook": 0,
+        "hunting": 0,
+        "shortbow": 0,
+        "crossbow": 0,
+        "longbow": 0,
+        "poisonbow": 0,
+        "scatterbow": 0,
+        "shadowbow": 0
+      }
+    },
+    {
+      "classId": "mage",
+      "seed": 71,
+      "status": "dead",
+      "time": 112,
+      "level": 6,
+      "kills": 227,
+      "bosses": 0,
+      "gold": 261,
+      "souls": 0,
+      "hp": 0,
+      "maxEnemies": 48,
+      "maxProjectiles": 5,
+      "choiceTimes": [
+        17.8,
+        37.85,
+        57.9,
+        77.95,
+        98
+      ],
+      "minimumChoiceGap": 20.049999999999997,
+      "minutes": [
+        {
+          "minute": 1,
+          "level": 4,
+          "kills": 104,
+          "gold": 104,
+          "hp": 91
+        }
+      ],
+      "simulationMs": 75,
+      "weapons": {
+        "blade": 0,
+        "orb": 1,
+        "fire": 0,
+        "frost": 0,
+        "lightning": 0,
+        "longsword": 0,
+        "axe": 0,
+        "spear": 0,
+        "hammer": 0,
+        "dual": 0,
+        "blood": 0,
+        "scythe": 0,
+        "firestaff": 1,
+        "froststaff": 2,
+        "arcanestaff": 2,
+        "stormstaff": 0,
+        "meteorstaff": 0,
+        "shadowstaff": 0,
+        "soulbook": 0,
+        "hunting": 0,
+        "shortbow": 0,
+        "crossbow": 0,
+        "longbow": 0,
+        "poisonbow": 0,
+        "scatterbow": 0,
+        "shadowbow": 0
+      }
+    },
+    {
+      "classId": "mage",
+      "seed": 313,
+      "status": "dead",
+      "time": 254,
+      "level": 10,
+      "kills": 476,
+      "bosses": 0,
+      "gold": 556,
+      "souls": 0,
+      "hp": 0,
+      "maxEnemies": 89,
+      "maxProjectiles": 3,
+      "choiceTimes": [
+        22.7,
+        42.75,
+        62.8,
+        82.85,
+        102.9,
+        122.95,
+        155.05,
+        182.4,
+        214.3
+      ],
+      "minimumChoiceGap": 20.049999999999997,
+      "minutes": [
+        {
+          "minute": 1,
+          "level": 3,
+          "kills": 103,
+          "gold": 103,
+          "hp": 98
+        },
+        {
+          "minute": 2,
+          "level": 6,
+          "kills": 204,
+          "gold": 227,
+          "hp": 88
+        },
+        {
+          "minute": 3,
+          "level": 8,
+          "kills": 290,
+          "gold": 361,
+          "hp": 50
+        },
+        {
+          "minute": 4,
+          "level": 10,
+          "kills": 439,
+          "gold": 525,
+          "hp": 34
+        }
+      ],
+      "simulationMs": 235,
+      "weapons": {
+        "blade": 0,
+        "orb": 2,
+        "fire": 0,
+        "frost": 0,
+        "lightning": 0,
+        "longsword": 0,
+        "axe": 0,
+        "spear": 0,
+        "hammer": 0,
+        "dual": 0,
+        "blood": 0,
+        "scythe": 0,
+        "firestaff": 2,
+        "froststaff": 0,
+        "arcanestaff": 2,
+        "stormstaff": 0,
+        "meteorstaff": 0,
+        "shadowstaff": 0,
+        "soulbook": 0,
+        "hunting": 0,
+        "shortbow": 0,
+        "crossbow": 0,
+        "longbow": 0,
+        "poisonbow": 0,
+        "scatterbow": 0,
+        "shadowbow": 0
+      }
+    },
+    {
+      "classId": "archer",
+      "seed": 12,
+      "status": "dead",
+      "time": 175,
+      "level": 9,
+      "kills": 420,
+      "bosses": 0,
+      "gold": 632,
+      "souls": 0,
+      "hp": 0,
+      "maxEnemies": 55,
+      "maxProjectiles": 9,
+      "choiceTimes": [
+        29.45,
+        49.5,
+        69.55,
+        89.6,
+        109.65,
+        129.7,
+        149.7,
+        169.7
+      ],
+      "minimumChoiceGap": 20,
+      "minutes": [
+        {
+          "minute": 1,
+          "level": 3,
+          "kills": 104,
+          "gold": 104,
+          "hp": 110
+        },
+        {
+          "minute": 2,
+          "level": 6,
+          "kills": 225,
+          "gold": 276,
+          "hp": 71
+        }
+      ],
+      "simulationMs": 102,
+      "weapons": {
+        "blade": 0,
+        "orb": 1,
+        "fire": 0,
+        "frost": 0,
+        "lightning": 0,
+        "longsword": 0,
+        "axe": 0,
+        "spear": 0,
+        "hammer": 0,
+        "dual": 0,
+        "blood": 0,
+        "scythe": 0,
+        "firestaff": 0,
+        "froststaff": 0,
+        "arcanestaff": 0,
+        "stormstaff": 0,
+        "meteorstaff": 0,
+        "shadowstaff": 0,
+        "soulbook": 0,
+        "hunting": 4,
+        "shortbow": 2,
+        "crossbow": 1,
+        "longbow": 0,
+        "poisonbow": 0,
+        "scatterbow": 0,
+        "shadowbow": 0
+      }
+    },
+    {
+      "classId": "archer",
+      "seed": 71,
+      "status": "dead",
+      "time": 162,
+      "level": 8,
+      "kills": 323,
+      "bosses": 0,
+      "gold": 431,
+      "souls": 0,
+      "hp": 0,
+      "maxEnemies": 56,
+      "maxProjectiles": 6,
+      "choiceTimes": [
+        27.6,
+        47.65,
+        68.4,
+        89.75,
+        109.8,
+        129.85,
+        149.85
+      ],
+      "minimumChoiceGap": 20,
+      "minutes": [
+        {
+          "minute": 1,
+          "level": 3,
+          "kills": 91,
+          "gold": 91,
+          "hp": 105
+        },
+        {
+          "minute": 2,
+          "level": 6,
+          "kills": 201,
+          "gold": 240,
+          "hp": 40
+        }
+      ],
+      "simulationMs": 83,
+      "weapons": {
+        "blade": 1,
+        "orb": 0,
+        "fire": 0,
+        "frost": 0,
+        "lightning": 0,
+        "longsword": 0,
+        "axe": 0,
+        "spear": 0,
+        "hammer": 0,
+        "dual": 0,
+        "blood": 0,
+        "scythe": 0,
+        "firestaff": 0,
+        "froststaff": 0,
+        "arcanestaff": 0,
+        "stormstaff": 0,
+        "meteorstaff": 0,
+        "shadowstaff": 0,
+        "soulbook": 0,
+        "hunting": 2,
+        "shortbow": 1,
+        "crossbow": 2,
+        "longbow": 0,
+        "poisonbow": 0,
+        "scatterbow": 0,
+        "shadowbow": 0
+      }
+    },
+    {
+      "classId": "archer",
+      "seed": 313,
+      "status": "dead",
+      "time": 247,
+      "level": 11,
+      "kills": 581,
+      "bosses": 0,
+      "gold": 747,
+      "souls": 0,
+      "hp": 0,
+      "maxEnemies": 79,
+      "maxProjectiles": 5,
+      "choiceTimes": [
+        29.8,
+        49.85,
+        69.9,
+        89.95,
+        110,
+        130.05,
+        161.75,
+        184.25,
+        208.25,
+        237.35
+      ],
+      "minimumChoiceGap": 20.049999999999997,
+      "minutes": [
+        {
+          "minute": 1,
+          "level": 3,
+          "kills": 102,
+          "gold": 102,
+          "hp": 125
+        },
+        {
+          "minute": 2,
+          "level": 6,
+          "kills": 205,
+          "gold": 234,
+          "hp": 109
+        },
+        {
+          "minute": 3,
+          "level": 8,
+          "kills": 341,
+          "gold": 461,
+          "hp": 92
+        },
+        {
+          "minute": 4,
+          "level": 11,
+          "kills": 557,
+          "gold": 706,
+          "hp": 81
+        }
+      ],
+      "simulationMs": 168,
+      "weapons": {
+        "blade": 0,
+        "orb": 0,
+        "fire": 0,
+        "frost": 0,
+        "lightning": 0,
+        "longsword": 0,
+        "axe": 0,
+        "spear": 0,
+        "hammer": 0,
+        "dual": 0,
+        "blood": 0,
+        "scythe": 0,
+        "firestaff": 0,
+        "froststaff": 0,
+        "arcanestaff": 0,
+        "stormstaff": 0,
+        "meteorstaff": 0,
+        "shadowstaff": 0,
+        "soulbook": 0,
+        "hunting": 1,
+        "shortbow": 1,
+        "crossbow": 2,
+        "longbow": 0,
+        "poisonbow": 0,
+        "scatterbow": 0,
+        "shadowbow": 0
+      }
+    }
+  ]
+}

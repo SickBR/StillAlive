@@ -1,0 +1,257 @@
+{
+  "note": "Deterministic heuristic bot, 60 Hz, no immunity/boosts; not a substitute for human playtesting.",
+  "results": [
+    {
+      "build": "Klinge & Orbit",
+      "seed": 12,
+      "result": "dead",
+      "time": 717,
+      "level": 23,
+      "kills": 885,
+      "hp": 0,
+      "bossHP": 952,
+      "maxEnemies": 230,
+      "maxBullets": 223,
+      "simulationMs": 10479,
+      "weapons": {
+        "blade": 5,
+        "orb": 3,
+        "fire": 0,
+        "frost": 2,
+        "lightning": 0
+      },
+      "damage": {
+        "blade": 46318,
+        "orb": 20929,
+        "fire": 0,
+        "frost": 11673,
+        "lightning": 0,
+        "dash": 9102
+      }
+    },
+    {
+      "build": "Klinge & Orbit",
+      "seed": 71,
+      "result": "won",
+      "time": 726,
+      "level": 26,
+      "kills": 1091,
+      "hp": 166,
+      "bossHP": 0,
+      "maxEnemies": 230,
+      "maxBullets": 224,
+      "simulationMs": 13943,
+      "weapons": {
+        "blade": 6,
+        "orb": 4,
+        "fire": 0,
+        "frost": 0,
+        "lightning": 0
+      },
+      "damage": {
+        "blade": 76333,
+        "orb": 26251,
+        "fire": 0,
+        "frost": 0,
+        "lightning": 0,
+        "dash": 7657
+      }
+    },
+    {
+      "build": "Klinge & Orbit",
+      "seed": 313,
+      "result": "won",
+      "time": 802,
+      "level": 27,
+      "kills": 1367,
+      "hp": 105,
+      "bossHP": 0,
+      "maxEnemies": 230,
+      "maxBullets": 223,
+      "simulationMs": 4642,
+      "weapons": {
+        "blade": 6,
+        "orb": 5,
+        "fire": 0,
+        "frost": 1,
+        "lightning": 0
+      },
+      "damage": {
+        "blade": 76939,
+        "orb": 56808,
+        "fire": 0,
+        "frost": 6705,
+        "lightning": 0,
+        "dash": 7461
+      }
+    },
+    {
+      "build": "Elementar",
+      "seed": 12,
+      "result": "won",
+      "time": 735,
+      "level": 27,
+      "kills": 1303,
+      "hp": 170,
+      "bossHP": 0,
+      "maxEnemies": 230,
+      "maxBullets": 193,
+      "simulationMs": 4240,
+      "weapons": {
+        "blade": 1,
+        "orb": 0,
+        "fire": 4,
+        "frost": 4,
+        "lightning": 3
+      },
+      "damage": {
+        "blade": 12402,
+        "orb": 0,
+        "fire": 42449,
+        "frost": 26372,
+        "lightning": 47954,
+        "dash": 8041
+      }
+    },
+    {
+      "build": "Elementar",
+      "seed": 71,
+      "result": "won",
+      "time": 681,
+      "level": 38,
+      "kills": 2603,
+      "hp": 148,
+      "bossHP": 0,
+      "maxEnemies": 230,
+      "maxBullets": 145,
+      "simulationMs": 2323,
+      "weapons": {
+        "blade": 1,
+        "orb": 0,
+        "fire": 6,
+        "frost": 6,
+        "lightning": 6
+      },
+      "damage": {
+        "blade": 10878,
+        "orb": 0,
+        "fire": 126264,
+        "frost": 35864,
+        "lightning": 96923,
+        "dash": 6898
+      }
+    },
+    {
+      "build": "Elementar",
+      "seed": 313,
+      "result": "won",
+      "time": 687,
+      "level": 38,
+      "kills": 2344,
+      "hp": 130,
+      "bossHP": 0,
+      "maxEnemies": 230,
+      "maxBullets": 91,
+      "simulationMs": 2896,
+      "weapons": {
+        "blade": 2,
+        "orb": 0,
+        "fire": 6,
+        "frost": 6,
+        "lightning": 6
+      },
+      "damage": {
+        "blade": 33433,
+        "orb": 0,
+        "fire": 42712,
+        "frost": 50317,
+        "lightning": 116913,
+        "dash": 7353
+      }
+    },
+    {
+      "build": "Ausgewogen",
+      "seed": 12,
+      "result": "won",
+      "time": 687,
+      "level": 33,
+      "kills": 1921,
+      "hp": 116,
+      "bossHP": 0,
+      "maxEnemies": 230,
+      "maxBullets": 198,
+      "simulationMs": 3868,
+      "weapons": {
+        "blade": 6,
+        "orb": 6,
+        "fire": 6,
+        "frost": 4,
+        "lightning": 4
+      },
+      "damage": {
+        "blade": 35185,
+        "orb": 72612,
+        "fire": 52832,
+        "frost": 8691,
+        "lightning": 30195,
+        "dash": 4731
+      }
+    },
+    {
+      "build": "Ausgewogen",
+      "seed": 71,
+      "result": "won",
+      "time": 686,
+      "level": 33,
+      "kills": 1987,
+      "hp": 122,
+      "bossHP": 0,
+      "maxEnemies": 230,
+      "maxBullets": 138,
+      "simulationMs": 2915,
+      "weapons": {
+        "blade": 6,
+        "orb": 6,
+        "fire": 3,
+        "frost": 2,
+        "lightning": 6
+      },
+      "damage": {
+        "blade": 42413,
+        "orb": 36039,
+        "fire": 28150,
+        "frost": 8529,
+        "lightning": 85783,
+        "dash": 5638
+      }
+    },
+    {
+      "build": "Ausgewogen",
+      "seed": 313,
+      "result": "won",
+      "time": 700,
+      "level": 30,
+      "kills": 1646,
+      "hp": 106,
+      "bossHP": 0,
+      "maxEnemies": 230,
+      "maxBullets": 232,
+      "simulationMs": 4115,
+      "weapons": {
+        "blade": 6,
+        "orb": 6,
+        "fire": 6,
+        "frost": 3,
+        "lightning": 4
+      },
+      "damage": {
+        "blade": 35411,
+        "orb": 24689,
+        "fire": 70888,
+        "frost": 3687,
+        "lightning": 27361,
+        "dash": 3154
+      }
+    }
+  ]
+}

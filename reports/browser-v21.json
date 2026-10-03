@@ -1,0 +1,39 @@
+{
+  "checks": [
+    "All management pages, passive collection and economy overview open",
+    "Central character selection works",
+    "Class selection, preset copy, editing and settings persist",
+    "Real movement, dash, pause, full checkpoint and reload",
+    "Three level cards and keyboard selection",
+    "Boss telegraph, reward and continuing Endless combat",
+    "Death ends and banks exactly one run",
+    "Weapon, mastery and permanent purchases via actual buttons",
+    "300-enemy, eight-weapon browser load scenario",
+    "Retirement, clean restarts and stable scene object count",
+    "Corrupt save recovery and compact desktop layout",
+    "Arena remains accessible on narrow menus"
+  ],
+  "errors": [],
+  "failed": [],
+  "performance": {
+    "medianFrameMs": 49.899999999999636,
+    "p95FrameMs": 50.100000000000364,
+    "objects": {
+      "images": 284,
+      "pooled": 10,
+      "effects": 29,
+      "labels": 55,
+      "displayObjects": 465
+    },
+    "enemies": 269,
+    "projectiles": 0
+  },
+  "restartObjects": [
+    465,
+    465,
+    465,
+    465,
+    465
+  ],
+  "note": "Chromium SwiftShader. UI controls real; bosses, economy resources and load state injected through development-only QA hook."
+}

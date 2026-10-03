@@ -1,0 +1,78 @@
+{
+  "note": "Three full 3-hour simulations at 20 Hz, prebuilt maximum class loadouts and artificial immunity/HP for stress only. Not proof of human survivability or balance.",
+  "results": [
+    {
+      "classId": "warrior",
+      "simulatedSeconds": 10800,
+      "bosses": 3,
+      "level": 12,
+      "kills": 670,
+      "maxEnemies": 300,
+      "maxShots": 0,
+      "maxLoot": 246,
+      "checkpoints": 18,
+      "wallMs": 59625
+    },
+    {
+      "classId": "mage",
+      "simulatedSeconds": 10800,
+      "bosses": 44,
+      "level": 11,
+      "kills": 108057,
+      "maxEnemies": 83,
+      "maxShots": 45,
+      "maxLoot": 380,
+      "checkpoints": 18,
+      "wallMs": 29074
+    },
+    {
+      "classId": "archer",
+      "simulatedSeconds": 10800,
+      "bosses": 44,
+      "level": 12,
+      "kills": 108183,
+      "maxEnemies": 82,
+      "maxShots": 138,
+      "maxLoot": 380,
+      "checkpoints": 18,
+      "wallMs": 33768
+    }
+  ],
+  "difficulties": [
+    {
+      "name": "Anfänger",
+      "bossHp": 1600,
+      "bossDamage": 30,
+      "gold": 120,
+      "souls": 3
+    },
+    {
+      "name": "Veteran",
+      "bossHp": 2160,
+      "bossDamage": 37.5,
+      "gold": 168,
+      "souls": 4
+    },
+    {
+      "name": "Albtraum",
+      "bossHp": 2960,
+      "bossDamage": 46.5,
+      "gold": 228,
+      "souls": 5
+    },
+    {
+      "name": "Hölle",
+      "bossHp": 4000,
+      "bossDamage": 57,
+      "gold": 312,
+      "souls": 7
+    },
+    {
+      "name": "Abgrund",
+      "bossHp": 5440,
+      "bossDamage": 70.5,
+      "gold": 420,
+      "souls": 10
+    }
+  ]
+}

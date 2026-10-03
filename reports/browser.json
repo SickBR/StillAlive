@@ -1,0 +1,47 @@
+{
+  "checks": [
+    "Settings and LocalStorage",
+    "Controls and statistics dialogs",
+    "Real keyboard movement and Shadow Step",
+    "Pause freezes and resumes simulation",
+    "All five weapons deal damage in real browser",
+    "Upgrade selection by keyboard",
+    "Boss spawn, attacks and victory screen",
+    "Clean restart and defeat screen",
+    "Run statistics are recorded exactly once",
+    "Bounded-object load scenario (230 enemies at setup)",
+    "Six restarts without accumulating scene objects",
+    "Corrupt save recovery",
+    "Narrow layout renders (keyboard required)"
+  ],
+  "errors": [],
+  "failed": [],
+  "damage": {
+    "blade": 9466,
+    "orb": 3813.5999999999945,
+    "fire": 2163.199999999999,
+    "frost": 3276,
+    "lightning": 1587.924,
+    "dash": 0
+  },
+  "performance": {
+    "medianFrameMs": 33.29999999999927,
+    "p95FrameMs": 50,
+    "objects": {
+      "images": 342,
+      "pooled": 15,
+      "effects": 10,
+      "labels": 31,
+      "displayObjects": 528
+    },
+    "enemies": 111
+  },
+  "objectsAfterRestarts": {
+    "images": 4,
+    "pooled": 353,
+    "effects": 0,
+    "labels": 0,
+    "displayObjects": 528
+  },
+  "note": "Headless Chromium using SwiftShader, not a hardware GPU benchmark. End screens and late encounters use development-only instrumentation."
+}
