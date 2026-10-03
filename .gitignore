@@ -1,0 +1,42 @@
+node_modules/
+dist/
+test-results/
+.idea/
+.venv/
+*.log
+.pnpm-store/
+.dependency-backup/
+
+# Local credentials and environment configuration
+.env
+.env.*
+!.env.example
+!.env.*.example
+.aws/
+.ssh/
+credentials.json
+credentials.*.json
+secrets.json
+secrets.*.json
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Python environments and caches
+venv/
+env/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Build, test and operating system artifacts
+build/
+coverage/
+playwright-report/
+*.tsbuildinfo
+.DS_Store
+Thumbs.db
+Desktop.ini
