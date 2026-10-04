@@ -15,10 +15,14 @@ try{
  await page.goto(`${base}?qa=1&floorSeconds=10`);await ready();const legacy=await page.evaluate(()=>localStorage.getItem('eclipse-survivor-v2'));
  await page.screenshot({path:'reports/screenshots/v3-step1-menu.png'});
  assert.equal(await page.evaluate(()=>window.__eclipse.save.profile.gold),87);assert.equal(await page.evaluate(()=>window.__eclipse.save.run),null);
- for(const id of ['mage','archer','warrior']){await page.locator(`[data-action=home-class][data-id=${id}]`).click();assert.equal(await page.locator(`[data-action=home-class][data-id=${id}]`).getAttribute('aria-pressed'),'true');}
+ for(const id of ['mage','archer','warrior']){await page.getByRole('button',{name:'Charaktere',exact:true}).click();await page.locator(`[data-action=preview-character][data-id=${id}]`).click();await page.locator(`[data-action=choose-character][data-id=${id}]`).click();assert.equal(await page.evaluate(()=>window.__eclipse.save.profile.presets[window.__eclipse.save.profile.selected].classId),id);}
  checks.push('Existing character selection and safe V2-profile copy');
  await page.getByRole('button',{name:'Spiel starten',exact:true}).click();await page.waitForTimeout(150);assert.equal(await page.evaluate(()=>window.__eclipse.engine.floorDuration),10);
- await page.keyboard.down('d');await page.waitForTimeout(450);await page.keyboard.up('d');assert.ok(await page.evaluate(()=>window.__eclipse.engine.player.x)>1600+30);
+ const startX=await page.evaluate(()=>window.__eclipse.engine.player.x);
+ await page.keyboard.down('d');
+ try{await page.waitForFunction(x=>window.__eclipse.engine.player.x>x+30,startX,{timeout:5000});}
+ finally{await page.keyboard.up('d');}
+ assert.ok(await page.evaluate(()=>window.__eclipse.engine.player.x)>startX+30);
  await page.keyboard.press('Space');await page.keyboard.press('Escape');const clocks=await page.evaluate(()=>[window.__eclipse.engine.time,window.__eclipse.engine.floorTime]);await page.waitForTimeout(250);assert.deepEqual(await page.evaluate(()=>[window.__eclipse.engine.time,window.__eclipse.engine.floorTime]),clocks);
  await page.getByRole('button',{name:'Speichern & Hauptmenü',exact:true}).click();await page.reload();await ready();await page.getByRole('button',{name:'Runde fortsetzen',exact:true}).click();assert.equal(await page.evaluate(()=>window.__eclipse.engine.status),'paused');await page.getByRole('button',{name:'Weiterkämpfen',exact:true}).click();
  checks.push('Movement, dash, pause, save to menu and reload in active floor');
@@ -33,8 +37,8 @@ try{
  await page.getByRole('button',{name:'Etage 2 starten',exact:true}).click();assert.deepEqual(await page.evaluate(()=>window.__eclipse.engine.build),chosen);assert.equal(await page.evaluate(()=>window.__eclipse.engine.floor),2);
  await page.waitForFunction(()=>window.__eclipse.engine.status==='floorReward',{},{timeout:30000});assert.equal(await page.evaluate(()=>window.__eclipse.engine.completedFloors),2);await page.locator('[data-action=reward]').first().click();await page.getByRole('button',{name:'Etage 3 starten',exact:true}).click();
  checks.push('Two real timed floors, three chest choices, exact one choice, build retained, chest and ready state reload');
- await page.evaluate(()=>{const e=window.__eclipse.engine;e.player.invulnerable=0;e.hurt(999999);});await page.getByText('Im Schatten gefallen.',{exact:true}).waitFor();assert.equal(await page.evaluate(()=>window.__eclipse.save.stats.floors),2);await page.getByRole('button',{name:'Neue Runde mit diesem Menü-Build',exact:true}).click();assert.equal(await page.evaluate(()=>window.__eclipse.engine.floor),1);assert.equal(await page.evaluate(()=>window.__eclipse.engine.completedFloors),0);
- await page.keyboard.press('Escape');await page.getByRole('button',{name:'Runde freiwillig beenden',exact:true}).click();await page.getByRole('button',{name:'Zum Hauptmenü',exact:true}).click();checks.push('Defeat, restart and retirement retain the existing flow');
+ await page.evaluate(()=>{const e=window.__eclipse.engine;e.player.invulnerable=0;e.hurt(999999);});await page.getByText('GEFALLEN',{exact:true}).waitFor();assert.equal(await page.evaluate(()=>window.__eclipse.save.stats.floors),2);await page.getByRole('button',{name:'Erneut spielen',exact:true}).click();assert.equal(await page.evaluate(()=>window.__eclipse.engine.floor),1);assert.equal(await page.evaluate(()=>window.__eclipse.engine.completedFloors),0);
+ await page.keyboard.press('Escape');await page.getByRole('button',{name:'Runde freiwillig beenden',exact:true}).click();await page.getByRole('button',{name:'Hauptmenü',exact:true}).click();checks.push('Defeat, restart and retirement retain the existing flow');
  assert.equal(await page.evaluate(()=>localStorage.getItem('eclipse-survivor-v2')),legacy);assert.ok(await page.evaluate(()=>localStorage.getItem('stillalive-v3-step1')));assert.deepEqual(errors,[]);assert.deepEqual(failed,[]);checks.push('V2 blob remains byte-for-byte unchanged; V3 uses its own key');
  const report={checks,errors,failed,timedFloors:2,floorSeconds:10,note:'Real timer and UI used. XP injected for level-card coverage; defeat injected at end. No artificial HP or immunity during the two floors. Separate browser context.'};writeFileSync('reports/browser-v3-step1.json',JSON.stringify(report,null,2));console.log(JSON.stringify(report,null,2));
 }finally{await browser.close();}

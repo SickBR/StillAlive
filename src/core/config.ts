@@ -2,9 +2,9 @@ export const WORLD = { width: 3200, height: 2400 };
 export const RULES = { bossAt:240, eclipseCycle:90, eclipseLength:20, playerSpeed:172, playerHp:125, pickupRadius:94, invulnerability:.55, dashCooldown:8, dashDuration:.28, dashSpeed:560, enemyCap:300, lootCap:380, dashDamage:38, eclipseDashBonus:1.3, levelHeal:1, weaponSlots:8, passiveSlots:8, weaponMax:8, passiveMax:8, choiceInterval:20, openingRadius:850, openingCount:18 };
 export type ClassId='warrior'|'mage'|'archer';
 export const CLASSES={
- warrior:{name:'Schattenkrieger',hp:125,speed:166,defense:14,damage:1,crit:.05,texture:'knight',description:'Nähe nährt Wut: bis zu +30 % Schaden. Ansturm trifft im Nahbereich.',mechanic:'WUT'},
- mage:{name:'Rissmagier',hp:98,speed:172,defense:4,damage:1.08,crit:.05,texture:'mage',description:'Jeder sechste Zauber überlädt: +65 % Schaden. Dash entfesselt Frost.',mechanic:'ÜBERLADUNG'},
- archer:{name:'Nachtjäger',hp:110,speed:184,defense:7,damage:1,crit:.12,texture:'archer',description:'Markiere Ziele mit Treffern. Ab dem dritten Treffer +30 % Schaden.',mechanic:'PRÄZISION'},
+ warrior:{name:'Reaper',hp:125,speed:166,defense:14,damage:1,crit:.05,texture:'reaper_gameplay',description:'Nähe nährt Wut: bis zu +30 % Schaden. Ansturm trifft im Nahbereich.',mechanic:'WUT'},
+ mage:{name:'Arkanist',hp:98,speed:172,defense:4,damage:1.08,crit:.05,texture:'arcanist-v1',description:'Jeder sechste Zauber überlädt: +65 % Schaden. Dash entfesselt Frost.',mechanic:'ÜBERLADUNG'},
+ archer:{name:'Schattenjäger',hp:110,speed:184,defense:7,damage:1,crit:.12,texture:'shadow-hunter-v1',description:'Markiere Ziele mit Treffern. Ab dem dritten Treffer +30 % Schaden.',mechanic:'PRÄZISION'},
 } as const;
 export const DIFFICULTIES=[
  {name:'Anfänger',arena:'Verlassenes Kloster',hp:1,damage:1,speed:1,reward:1,color:0xaab6a0},

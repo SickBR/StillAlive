@@ -1,4 +1,6 @@
 import Phaser from 'phaser';
+import {PLAYER_SPRITES,PLAYER_FRAMES,animationsFor,PlayerAnimator,animationKey} from '../player-animation';
+import type {ClassId,} from '../core/config';
 import { Engine, type GameEvent } from '../core/engine';
 import { ENEMIES, WORLD, CLASSES, DIFFICULTIES, WEAPONS, isBoss } from '../core/config';
 import { Random } from '../core/random';
@@ -15,7 +17,8 @@ export class GameScene extends Phaser.Scene {
   onReady:()=>void=()=>{};
   private terrain!:Phaser.GameObjects.TileSprite;
   private props:Phaser.GameObjects.Image[]=[];
-  private hero!:Phaser.GameObjects.Image;
+  private hero!:Phaser.GameObjects.Sprite;
+  private animator=new PlayerAnimator();
   private glow!:Phaser.GameObjects.Image;
   private floorFx!:Phaser.GameObjects.Graphics;
   private fx!:Phaser.GameObjects.Graphics;
@@ -26,16 +29,16 @@ export class GameScene extends Phaser.Scene {
   private effects:Effect[]=[];
   private labels:Label[]=[];
   private textPool:Phaser.GameObjects.Text[]=[];
-  private lastDirection=1;
   private dashRequested=false;
-  private deathTime=0;
   private effectId=0;
   constructor(){super('arena');}
   preload(){
     for(const key of ['knight','mage','archer',...Object.keys(ENEMIES)])this.load.spritesheet(key,`assets/${key}.png`,{frameWidth:64,frameHeight:64});
+    for(const {texture} of Object.values(PLAYER_SPRITES)){if(texture===PLAYER_SPRITES.warrior.texture)this.load.atlas(texture,`assets/${texture}.png`,`assets/${texture}.json`);else this.load.spritesheet(texture,`assets/${texture}.png`,{frameWidth:PLAYER_FRAMES.width,frameHeight:PLAYER_FRAMES.height});}
     for(const key of ['ground','ground1','ground2','ground3','ground4','pillar','grave','tree','light','icon-xp','icon-heal','icon-fire','icon-orb','icon-arrow','icon-frost'])this.load.image(key,`assets/${key}.png`);
   }
   create(){
+    for(const id of Object.keys(PLAYER_SPRITES) as ClassId[])for(const [state,a] of Object.entries(animationsFor(id))){const key=`${PLAYER_SPRITES[id].texture}-${state}`;if(!this.anims.exists(key))this.anims.create({key,frames:Array.from({length:a.end-a.start+1},(_,i)=>({key:PLAYER_SPRITES[id].texture,frame:id==='warrior'?String(a.start+i):a.start+i})),frameRate:a.frameRate,repeat:a.repeat});}
     this.terrain=this.add.tileSprite(0,0,WORLD.width,WORLD.height,'ground').setOrigin(0).setDepth(-100);
     const ground=this.add.graphics().setDepth(-95), rng=new Random(8821);
     ground.lineStyle(2,0x727665,.16);
@@ -50,7 +53,7 @@ export class GameScene extends Phaser.Scene {
     const border=this.add.graphics().setDepth(-90);border.lineStyle(20,0x151d23,.8);border.strokeRect(12,12,WORLD.width-24,WORLD.height-24);border.lineStyle(2,0x788076,.3);border.strokeRect(28,28,WORLD.width-56,WORLD.height-56);
     this.floorFx=this.add.graphics().setDepth(-10);
     this.glow=this.add.image(1600,1200,'light').setScale(2.5).setDepth(-50).setBlendMode(Phaser.BlendModes.ADD).setAlpha(.75);
-    this.hero=this.add.image(1600,1200,'knight').setScale(1.2).setOrigin(.5,.72);
+    this.hero=this.add.sprite(1600,1200,PLAYER_SPRITES.warrior.texture).setScale(PLAYER_SPRITES.warrior.scale).setOrigin(PLAYER_FRAMES.originX,PLAYER_FRAMES.originY);
     this.fx=this.add.graphics().setDepth(10000);
     this.lighting=this.add.graphics().setScrollFactor(0).setDepth(12000);
     this.cameras.main.setBounds(0,0,WORLD.width,WORLD.height).setZoom(1.08).startFollow(this.hero,true,.09,.09);
@@ -60,13 +63,13 @@ export class GameScene extends Phaser.Scene {
     this.onReady();
   }
   startRun(engine:Engine){
-    this.engine=engine;this.terrain.setTexture(engine.config.difficulty?'ground'+engine.config.difficulty:'ground');this.hero.setTexture(CLASSES[engine.config.classId].texture);for(const [i,prop] of this.props.entries()){prop.setTint(DIFFICULTIES[engine.config.difficulty].color);prop.setTexture(engine.config.difficulty===1?(i%3?'tree':'grave'):engine.config.difficulty===2?(i%3?'grave':'pillar'):engine.config.difficulty===3?(i%4?'pillar':'tree'):i%3?'grave':'pillar');}this.effects=[];this.dashRequested=false;this.deathTime=0;
+    this.engine=engine;this.terrain.setTexture(engine.config.difficulty?'ground'+engine.config.difficulty:'ground');this.hero.anims.stop();this.hero.setTexture(CLASSES[engine.config.classId].texture).setScale(PLAYER_SPRITES[engine.config.classId].scale);for(const [i,prop] of this.props.entries()){prop.setTint(DIFFICULTIES[engine.config.difficulty].color);prop.setTexture(engine.config.difficulty===1?(i%3?'tree':'grave'):engine.config.difficulty===2?(i%3?'grave':'pillar'):engine.config.difficulty===3?(i%4?'pillar':'tree'):i%3?'grave':'pillar');}this.effects=[];this.dashRequested=false;this.animator=new PlayerAnimator(engine.config.classId);this.hero.setOrigin(.5,engine.config.classId==='warrior'?260/280:PLAYER_FRAMES.originY);this.hero.play(animationKey(engine.config.classId,'idle'));
     for(const image of this.images.values()){image.setVisible(false);this.pool.push(image);}this.images.clear();
     for(const label of this.labels){label.text.setVisible(false);this.textPool.push(label.text);}this.labels=[];
-    this.hero.setPosition(engine.player.x,engine.player.y).setFrame(0).setAlpha(1).setAngle(0).clearTint();this.cameras.main.centerOn(engine.player.x,engine.player.y);
+    this.hero.setPosition(engine.player.x,engine.player.y).setFrame(engine.config.classId==='warrior'?'0':0).setAlpha(1).setAngle(0).clearTint();this.cameras.main.centerOn(engine.player.x,engine.player.y);
     for(const key of Object.values(this.keys))key.reset();
   }
-  clearRun(){this.engine=undefined;this.effects=[];this.fx.clear();this.floorFx.clear();for(const image of this.images.values()){image.setVisible(false);this.pool.push(image);}this.images.clear();for(const label of this.labels){label.text.setVisible(false);this.textPool.push(label.text);}this.labels=[];}
+  clearRun(){this.hero.anims.stop();this.engine=undefined;this.effects=[];this.fx.clear();this.floorFx.clear();for(const image of this.images.values()){image.setVisible(false);this.pool.push(image);}this.images.clear();for(const label of this.labels){label.text.setVisible(false);this.textPool.push(label.text);}this.labels=[];}
   private image(key:string,texture:string,x:number,y:number,seen:Set<string>){
     seen.add(key);let image=this.images.get(key);
     if(!image){image=this.pool.pop()??this.add.image(x,y,texture);this.images.set(key,image);}
@@ -82,6 +85,8 @@ export class GameScene extends Phaser.Scene {
     this.onTick();
   }
   private event(event:GameEvent){
+    if(event.type==='player-attack')this.animator.attack(event.angle??0);
+    if(event.type==='hurt')this.animator.hit();
     const life=event.type==='lightning'?.22:event.type==='blade'?.25:event.type==='death'?.48:event.type==='dash'?.45:.65;
     if(['blade','thrust','frost','lightning','dash','death','impact','charge','overload'].includes(event.type)&&this.effects.length<180)this.effects.push({...event,life,maxLife:life,id:this.effectId++});
     if(event.type==='hit'&&this.settings.numbers&&this.labels.length<55){
@@ -97,11 +102,11 @@ export class GameScene extends Phaser.Scene {
     floor.lineStyle(1,e.eclipse?0xc89da9:0xa8b4a3,.18);floor.strokeCircle(p.x,p.y,33);
     this.hero.setPosition(p.x,p.y).setDepth(8500);
     this.glow.setPosition(p.x,p.y);
-    if(p.directionX!==0)this.lastDirection=p.directionX<0?-1:1;
-    this.hero.setFlipX(this.lastDirection<0);
-    if(e.status==='dead')this.deathTime+=dt;
-    const frame=e.status==='dead'?7+Math.min(3,Math.floor(this.deathTime*8)):p.invulnerable>0&&p.dashLeft===0?6:p.moving?2+Math.floor(e.time*10)%4:Math.floor(e.time*2)%2;
-    this.hero.setFrame(frame).setAlpha(p.dashLeft>0?.6:p.invulnerable>0?.72+Math.sin(e.time*50)*.25:1);
+    this.animator.step(dt,p.moving,p.directionX,e.status==='dead',e.status==='playing');
+    const key=animationKey(e.config.classId,this.animator.state);
+    if(this.hero.anims.currentAnim?.key!==key)this.hero.play(key);
+    if(e.status==='playing'||e.status==='dead')this.hero.anims.resume();else this.hero.anims.pause();
+    this.hero.setFlipX(this.animator.facing<0).setAlpha(e.status==='dead'?1:p.dashLeft>0?.6:p.invulnerable>0?.72+Math.sin(e.time*50)*.25:1);
     for(const enemy of e.enemies){
       const scale=isBoss(enemy.kind)?2.4:enemy.kind==='brute'?1.4:enemy.kind==='reaper'?1.25:1;
       floor.fillStyle(0x080e17,.32);floor.fillEllipse(enemy.x,enemy.y+10,32*scale,12*scale);
@@ -156,5 +161,6 @@ export class GameScene extends Phaser.Scene {
     }
     if(p.hp/p.maxHp<.28){this.lighting.lineStyle(24,0x9e4456,.1+Math.sin(e.time*4)*.04);this.lighting.strokeRect(0,0,1280,720);}
   }
-  get diagnostics(){return {images:this.images.size,pooled:this.pool.length,effects:this.effects.length,labels:this.labels.length,displayObjects:this.children.length};}
+  get playerDeathComplete(){return this.animator.deathComplete;}
+  get diagnostics(){return {playerAnimation:this.animator.state,playerFrame:this.hero.frame.name,playerFacing:this.animator.facing,playerTexture:this.hero.texture.key,playerScale:this.hero.scaleX,playerDeathComplete:this.playerDeathComplete,images:this.images.size,pooled:this.pool.length,effects:this.effects.length,labels:this.labels.length,displayObjects:this.children.length};}
 }

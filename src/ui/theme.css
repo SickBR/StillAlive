@@ -1,0 +1,332 @@
+/* STILLALIVE · unified GUI theme.
+   Carries the navy/gold language of the V4 main menu into every dialog, the HUD and all run overlays.
+   Loaded last; selectors are scoped with #ui so they win over older layered rules in style.css.
+   Only presentation — no IDs, data-actions or game state are touched. */
+:root{
+ --t-ink:#060a13;--t-panel-a:#141c2a;--t-panel-b:#0a0f1a;--t-card-a:#172131;--t-card-b:#0c1320;
+ --t-edge:#bda16c59;--t-edge-strong:#d9b779b3;--t-rule:#c9b18a26;
+ --t-text:#eee7db;--t-soft:#c9c1b3;--t-muted:#9fa2b2;--t-gold:#d9b779;--t-gold-hi:#f3d69c;--t-violet:#ac88dc;
+ --t-hp-a:#e57b84;--t-hp-b:#a8394f;--t-xp-a:#7d5fc4;--t-xp-b:#c9aef2;
+ --t-common:#b9b4a6;--t-rare:#7fa8e8;--t-epic:#c792f0;
+ --t-serif:LocalSerif,Georgia,serif;--t-body:Arial,Helvetica,sans-serif;
+}
+
+/* ---------- shared atoms ---------- */
+#ui .eyebrow{font:600 11px/1.4 var(--t-body);letter-spacing:2.6px;color:var(--t-gold)}
+#ui .small-label{font:600 10px/1.4 var(--t-body);letter-spacing:2px;color:var(--t-gold)}
+#ui kbd{font:600 10px/1 var(--t-body);color:var(--t-gold-hi);border:1px solid #bda16c66;border-bottom-width:2px;background:#0a101bcc;border-radius:2px;padding:4px 7px}
+#ui .primary{
+ background:linear-gradient(110deg,#cda65f,#f1d495 48%,#c49c57);color:#1b1720;border:1px solid #f1d79b;
+ box-shadow:inset 0 0 0 3px #2e21185c,inset 0 0 0 4px #f3dfac90,0 4px 18px #ca9f3d18;
+ font:700 14px/1.3 var(--t-body);letter-spacing:.6px;padding:15px 22px;min-height:52px;justify-content:center;border-radius:0}
+#ui .primary:hover:not(:disabled){background:linear-gradient(110deg,#e6c783,#ffe6b0,#d6b371);box-shadow:inset 0 0 0 3px #2e21185c,inset 0 0 0 4px #f3dfac90,0 6px 26px #ca9f3d38}
+#ui .secondary{background:#0a121c9e;color:#d8cfbf;border:1px solid #8175617a;font:600 13px/1.3 var(--t-body);letter-spacing:.3px;padding:13px 18px;min-height:46px;border-radius:0;display:flex;align-items:center;justify-content:center;gap:10px}
+#ui .secondary:hover:not(:disabled){background:#c4a17314;border-color:var(--t-gold);color:var(--t-gold-hi)}
+#ui .text-button{font:12px/1.4 var(--t-body);color:#a9a3b4;letter-spacing:.3px}
+#ui .text-button:hover{color:#f0b8a8}
+#ui button:focus-visible,#ui input:focus-visible,#ui select:focus-visible{outline:2px solid var(--t-gold-hi);outline-offset:3px}
+#ui .full{margin-top:12px}
+
+/* ---------- dialogs (Einstellungen, Vermächtnis, Charaktere, Kodex, Welten, Chronik, Steuerung, Vorlagen) ---------- */
+#ui .dialog-layer{background:radial-gradient(ellipse at 50% 28%,#1d1533aa,#04070fe8 72%);backdrop-filter:blur(7px);animation:sa-backdrop-in .22s ease both}
+#ui .dialog{
+ background:radial-gradient(ellipse at 50% 0%,#6d498426,transparent 50%),linear-gradient(165deg,var(--t-panel-a) 0%,var(--t-panel-b) 100%);
+ border:1px solid var(--t-edge);box-shadow:0 30px 110px #000c,inset 0 0 0 1px #00000080,inset 0 0 70px #0006;
+ padding:42px 48px 32px;color:var(--t-text);animation:sa-panel-in .3s cubic-bezier(.2,.8,.2,1) both;
+ scrollbar-width:thin;scrollbar-color:#7d6b83 #0c111b}
+#ui .dialog::before{content:'';position:absolute;left:12px;top:12px;width:26px;height:26px;border-left:2px solid var(--t-gold);border-top:2px solid var(--t-gold);pointer-events:none;opacity:.85}
+#ui .dialog h2{font:400 clamp(30px,3vw,42px)/1.1 var(--t-serif);letter-spacing:1.5px;color:#f2e8d8;margin-top:12px;text-shadow:0 3px 22px #a78bdd22}
+#ui .dialog-rule{display:block;width:120px;height:1px;margin:16px 0 0;background:linear-gradient(90deg,var(--t-gold),transparent)}
+#ui .dialog-sub{font:14px/1.65 var(--t-body);color:#b9b1c4;margin:14px 0 26px;max-width:72ch}
+#ui .dialog h3{color:#eadcc2}
+#ui .close{width:42px;height:42px;top:16px;right:16px;display:grid;place-items:center;border:1px solid #bda16c55;background:#0a111bcc;color:#d9c9a8;font-size:22px;line-height:1;z-index:2}
+#ui .close:hover{border-color:var(--t-gold);color:var(--t-gold-hi);background:#c4a17314;transform:none}
+#ui .dialog>.secondary.full:last-child{margin-top:22px}
+
+/* settings */
+#ui .setting{font:600 14px var(--t-body);color:var(--t-soft);padding:6px 0 18px;margin:0}
+#ui .setting>span{font:400 20px var(--t-serif);color:var(--t-gold-hi)}
+#ui .setting input[type=range]{appearance:none;-webkit-appearance:none;height:6px;background:linear-gradient(90deg,var(--t-gold) var(--fill,50%),#ffffff14 var(--fill,50%));border:1px solid #bda16c44;margin-top:16px}
+#ui .setting input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;background:var(--t-gold-hi);border:2px solid #2a2016;transform:rotate(45deg);cursor:pointer;box-shadow:0 0 10px #d9b77966}
+#ui .setting input[type=range]::-moz-range-thumb{width:16px;height:16px;background:var(--t-gold-hi);border:2px solid #2a2016;border-radius:0;transform:rotate(45deg);cursor:pointer}
+#ui .toggle-row{font:600 14px var(--t-body);color:var(--t-soft);border-top:1px solid var(--t-rule);padding:18px 0}
+#ui .toggle{width:44px;height:22px;border:1px solid #6a6576;background:#0a101b;border-radius:0}
+#ui .toggle:after{width:14px;height:14px;top:3px;left:3px;background:#787487}
+#ui .toggle-row input:checked+.toggle{background:linear-gradient(90deg,#8b6f3f,#c49c57);border-color:var(--t-gold)}
+#ui .toggle-row input:checked+.toggle:after{left:25px;background:#fff1d0}
+
+/* controls guide */
+#ui .guide{font:14px/1.75 var(--t-body);color:#b7b3c2}
+#ui .guide p{margin:0;padding:12px 0;border-top:1px solid var(--t-rule)}
+#ui .guide p:first-child{border-top:0;padding-top:0}
+#ui .guide b{color:var(--t-gold-hi);font-weight:600}
+
+/* shared card surface for every list inside dialogs */
+#ui .permanent-card,#ui .catalog-card,#ui .codex-entry,#ui .difficulty,#ui .history>div,#ui .dialog .character-card,#ui .character-preview{
+ background:linear-gradient(160deg,var(--t-card-a),var(--t-card-b));border:1px solid #bda16c2e;border-radius:0;box-shadow:inset 0 1px 0 #ffffff08}
+#ui .permanent-card:hover,#ui .catalog-card:hover,#ui .codex-entry:not(.codex-locked):hover,#ui .difficulty:hover:not(:disabled),#ui .history>div:hover{border-color:#d9b77980}
+
+/* Vermächtnis */
+#ui .permanent-summary{background:linear-gradient(90deg,transparent,#d9b77912,transparent);border:0;border-top:1px solid var(--t-rule);border-bottom:1px solid var(--t-rule);padding:18px;margin:4px 0 22px;gap:44px}
+#ui .permanent-summary span{font:20px var(--t-serif);color:var(--t-gold-hi)}
+#ui .permanent-card{padding:22px;gap:14px}
+#ui .permanent-card h3{font:24px var(--t-serif)}
+#ui .permanent-card header small{font:600 10px var(--t-body);letter-spacing:1.8px;color:var(--t-muted)}
+#ui .permanent-card header strong{font:24px var(--t-serif);color:var(--t-gold-hi)}
+#ui .permanent-card p,#ui .permanent-explanation{font:13px/1.7 var(--t-body);color:#b9b6c4}
+#ui .permanent-card dl{font:13px/1.5 var(--t-body)}
+#ui .permanent-card dt{color:var(--t-muted)}
+#ui .permanent-card dd{color:#e6ddcc}
+#ui .rank-track{height:6px;gap:4px}
+#ui .rank-track i{background:#ffffff12;transform:skewX(-20deg)}
+#ui .rank-track .filled{background:linear-gradient(180deg,#f3d69c,#c49c57);box-shadow:0 0 8px #d9b77955}
+#ui .permanent-card .secondary:not(:disabled){border-color:#d9b77999;color:var(--t-gold-hi)}
+#ui .permanent-explanation{background:#0a111b99;border-left:2px solid var(--t-gold)}
+
+/* Kodex */
+#ui .feature-scope{font:14px/1.7 var(--t-body);color:#b9b6c4}
+#ui .codex-preview{grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+#ui .codex-entry{padding:12px 14px;gap:14px}
+#ui .codex-entry .item-icon{width:36px;height:36px;padding:4px;border:1px solid #bda16c33;background:radial-gradient(circle,#ac88dc22,transparent 70%)}
+#ui .codex-entry b{font:17px var(--t-serif);color:#eadfcb}
+#ui .codex-entry small{font:12px var(--t-body);color:var(--t-muted)}
+#ui .codex-entry:not(.codex-locked) small{color:var(--t-gold)}
+#ui .codex-locked{opacity:.5}
+
+/* Welten */
+#ui .difficulty{padding:16px 20px;gap:5px;position:relative;color:var(--t-text)}
+#ui .difficulty b{font:22px var(--t-serif);color:#f0e4cf}
+#ui .difficulty span{font:14px var(--t-body);color:var(--t-soft)}
+#ui .difficulty small{font:12px var(--t-body);color:var(--t-muted)}
+#ui .difficulty.selected{border-color:var(--t-gold);background:linear-gradient(100deg,#d9b7791c,transparent 60%),linear-gradient(160deg,var(--t-card-a),var(--t-card-b));box-shadow:inset 3px 0 0 var(--t-gold)}
+#ui .difficulty.selected::after{content:'AKTIV';position:absolute;right:18px;top:18px;font:600 10px var(--t-body);letter-spacing:2px;color:var(--t-gold);border:1px solid #d9b77980;padding:4px 8px}
+#ui .difficulty:hover:not(:disabled){transform:translateX(3px)}
+
+/* Chronik */
+#ui .history>div{padding:16px 18px;gap:5px}
+#ui .history b{font:19px var(--t-serif);color:#efe2cb;font-weight:400}
+#ui .history span{font:13px var(--t-body);color:var(--t-soft)}
+#ui .history small{font:12px var(--t-body);color:var(--t-muted)}
+
+/* Build-Vorlagen */
+#ui .catalog-card{padding:20px}
+#ui .catalog-card h3{font:22px var(--t-serif);color:#f0e4cf}
+#ui .catalog-card p{font:13px/1.6 var(--t-body);color:var(--t-soft)}
+#ui .catalog-card.selected{border-color:var(--t-gold);box-shadow:inset 0 0 30px #d9b77912}
+#ui .editor-label{font:600 13px var(--t-body);color:var(--t-soft)}
+#ui .dialog input:not([type]),#ui .dialog select{background:#070c15;border:1px solid #bda16c55;color:var(--t-text);padding:10px 12px;border-radius:0}
+
+/* Charaktere */
+#ui .dialog .character-card{transition:border-color .18s,transform .18s,box-shadow .18s}
+#ui .dialog .character-card:not(:disabled):hover{border-color:#d9b779aa;box-shadow:0 10px 30px #0007}
+#ui .dialog .character-card.previewed{border-color:var(--t-gold-hi);box-shadow:inset 0 0 0 1px #f3d69c55,0 0 26px #d9b77926}
+#ui .dialog .character-card b{font-family:var(--t-serif);font-weight:400;color:#f0e4cf}
+#ui .dialog .character-card small{font-size:10px;letter-spacing:1px;color:var(--t-muted)}
+#ui .dialog .character-card.future-character{opacity:.55;background:repeating-linear-gradient(135deg,#0b111c,#0b111c 8px,#0d1420 8px,#0d1420 16px)}
+#ui .character-availability{font-size:11px!important;color:var(--t-gold)!important}
+#ui .future-character .character-availability{color:var(--t-muted)!important}
+#ui .character-preview{padding:22px}
+#ui .character-preview h3{font:30px var(--t-serif);color:#f2e8d8}
+#ui .character-properties{font:13px var(--t-body)}
+#ui .character-ability{border-left-color:var(--t-gold)!important;background:#0a111bb3!important}
+#ui .character-ability p{font:13px/1.65 var(--t-body);color:#cfc8d6}
+#ui .character-dialog-note{font:12px/1.7 var(--t-body);color:var(--t-muted);border-top-color:var(--t-rule)}
+
+/* ---------- toast ---------- */
+#ui .toast{font:600 13px/1.6 var(--t-body);color:var(--t-text);letter-spacing:.3px;background:linear-gradient(165deg,#141c2af2,#0a0f1af5);border:1px solid var(--t-edge);border-left:3px solid var(--t-gold);box-shadow:0 12px 40px #000a;padding:13px 22px;bottom:150px}
+
+/* ---------- in-game HUD ---------- */
+#ui.game-ui .hud-frame{position:relative;background:linear-gradient(165deg,#121a28e6,#080d17e6);border:1px solid var(--t-edge);box-shadow:0 8px 26px #0008,inset 0 0 22px #0005}
+#ui.game-ui .hud-frame::before{content:'';position:absolute;left:-1px;top:-1px;width:12px;height:12px;border-left:2px solid var(--t-gold);border-top:2px solid var(--t-gold);pointer-events:none}
+#ui.game-ui .hud-top{padding:18px 24px 70px;background:linear-gradient(#04070fd9,#04070f00)}
+#ui.game-ui .vitals{width:320px;padding:12px 14px 11px}
+#ui.game-ui .vitals-label{display:flex;align-items:center;gap:8px;font:700 12px var(--t-body);letter-spacing:1.6px;text-transform:uppercase}
+#ui.game-ui .vitals-label .item-icon{width:20px;height:20px;image-rendering:pixelated}
+#ui.game-ui .vitals-label>span{color:var(--t-gold-hi);flex:1}
+#ui.game-ui .vitals-label strong{font:400 17px var(--t-serif);letter-spacing:.5px;color:#f6e9e0;font-variant-numeric:tabular-nums}
+#ui.game-ui .hp-track{height:16px;padding:2px;margin-top:8px;border:1px solid #bda16c66;background:#05070c;position:relative}
+#ui.game-ui .hp-track>div{height:10px;background:linear-gradient(180deg,#f19aa0 0%,var(--t-hp-a) 25%,var(--t-hp-b) 75%,#7a2438 100%);box-shadow:0 0 12px #e05a6866}
+#ui.game-ui .hp-track::after{content:'';position:absolute;inset:2px;pointer-events:none;background:repeating-linear-gradient(90deg,transparent 0 calc(10% - 1px),#05070c99 calc(10% - 1px) 10%)}
+#ui.game-ui .level-row{gap:10px;margin-top:9px;font:700 11px var(--t-body);letter-spacing:1px;color:var(--t-gold-hi)}
+#ui.game-ui .level-row>span:first-child{min-width:44px}
+#ui.game-ui .xp-track{height:7px;background:#05070c;border:1px solid #ac88dc44}
+#ui.game-ui .xp-track>div{background:linear-gradient(90deg,var(--t-xp-a),var(--t-xp-b));box-shadow:0 0 8px #ac88dc77}
+#ui.game-ui .level-row>span:last-child{font:600 11px var(--t-body);color:#c8bcdc;letter-spacing:.3px}
+#ui.game-ui #live-stats{font:12px var(--t-body);color:#aaa6b8;margin-top:8px;letter-spacing:.2px}
+
+#ui.game-ui .run-clock{top:14px;padding:10px 26px 12px;min-width:250px}
+#ui.game-ui .run-clock::before{content:'';position:absolute;inset:0;z-index:-1;background:radial-gradient(ellipse at 50% 40%,#04070fcc,transparent 72%)}
+#ui.game-ui .run-clock>span:first-child{font:700 12px var(--t-body);letter-spacing:4px;color:var(--t-gold)}
+#ui.game-ui .run-clock strong{font:400 46px/1 var(--t-serif);letter-spacing:5px;color:#f6ecdb;margin:6px 0 6px;text-shadow:0 2px 0 #000,0 0 28px #d9b77940;font-variant-numeric:tabular-nums}
+#ui.game-ui .run-clock>#phase-timer{font:12px var(--t-body);letter-spacing:.8px;color:#aaa6b8}
+#ui.game-ui .run-clock #resource-text{font:600 12px var(--t-body);color:var(--t-gold-hi);margin-top:5px}
+#ui.game-ui.eclipse .run-clock>span:first-child{color:#e2a0c4}
+
+#ui.game-ui .run-count{display:flex;align-items:stretch;gap:10px}
+#ui.game-ui .kill-counter{display:flex;align-items:center;gap:10px;padding:8px 16px 8px 12px;min-width:132px}
+#ui.game-ui .kill-counter .item-icon{width:28px;height:28px;image-rendering:pixelated}
+#ui.game-ui .kill-counter span{display:block;font:700 10px var(--t-body);letter-spacing:2px;color:var(--t-gold)}
+#ui.game-ui .kill-counter strong{display:block;font:400 28px/1.05 var(--t-serif);color:#f6ecdb;font-variant-numeric:tabular-nums}
+#ui.game-ui .run-count .hud-pause{pointer-events:auto;width:auto;height:auto;padding:8px 14px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font:700 12px var(--t-body);letter-spacing:1px;color:var(--t-text)}
+#ui.game-ui .hud-pause i{display:block;width:12px;height:13px;border-left:4px solid var(--t-gold-hi);border-right:4px solid var(--t-gold-hi);margin-bottom:2px}
+#ui.game-ui .hud-pause>span{font:600 9px var(--t-body);letter-spacing:1.5px;color:var(--t-muted);margin:0}
+#ui.game-ui .hud-pause:hover{border-color:var(--t-gold);background:linear-gradient(165deg,#2a2418e6,#0d0f15e6);transform:none}
+
+#ui.game-ui .hud-bottom{bottom:0;padding:70px 24px 20px;background:linear-gradient(transparent,#04070fd9);align-items:flex-end}
+#ui.game-ui .arsenal{padding:10px 12px 4px}
+#ui.game-ui .arsenal .small-label{font:700 10px var(--t-body);letter-spacing:2px;color:var(--t-gold)}
+#ui.game-ui .arsenal #mechanic{font:700 11px var(--t-body);letter-spacing:.5px;color:#f0b8a8;margin-left:12px}
+#ui.game-ui .arsenal .weapon-slots{gap:5px;margin:6px 0 9px}
+#ui.game-ui .arsenal .weapon-slot{width:44px;height:44px;border:1px solid #4a4658;background:#070b13cc;border-radius:0}
+#ui.game-ui .arsenal .weapon-slot.equipped{border-color:#bda16c99;background:radial-gradient(circle at 50% 40%,#ac88dc2a,transparent 70%),#0b1220;box-shadow:inset 0 0 0 1px #00000099,0 0 10px #d9b77914}
+#ui.game-ui .arsenal .weapon-slot.empty{opacity:1;background:#05080e80;border-style:dashed;border-color:#3a3646}
+#ui.game-ui .arsenal .item-icon{width:30px;height:30px}
+#ui.game-ui .weapon-slot>span{right:2px;bottom:1px;min-width:14px;padding:0 2px;font:700 10px/14px var(--t-body);text-align:center;color:#1b1720;background:var(--t-gold);}
+#ui.game-ui .weapon-cooldown{height:3px;background:linear-gradient(90deg,#c9aef2,#f3d69c);opacity:.95}
+
+#ui.game-ui .hud-bottom .dash-panel{transform:none;padding:10px 14px;gap:12px}
+#ui.game-ui .dash-icon{width:46px;height:46px;border:1px solid #ac88dc66;background:radial-gradient(circle,#ac88dc33,#0a0f1a)}
+#ui.game-ui .dash-icon .item-icon{width:30px;height:30px;image-rendering:pixelated}
+#ui.game-ui .dash-panel>div:last-child{width:170px}
+#ui.game-ui .dash-panel span{font:700 10px var(--t-body);letter-spacing:2px;color:#cdb8ea}
+#ui.game-ui .dash-track{height:7px;background:#05070c;border:1px solid #ac88dc44;margin:7px 0 6px}
+#ui.game-ui .dash-track i{height:5px;background:linear-gradient(90deg,var(--t-xp-a),var(--t-xp-b))}
+#ui.game-ui .dash-panel small{font:600 11px var(--t-body);letter-spacing:1px;color:var(--t-muted)}
+#ui.game-ui.dash-ready .dash-panel small{color:var(--t-gold-hi)}
+#ui.game-ui.dash-ready .dash-icon{border-color:var(--t-gold);box-shadow:0 0 14px #d9b77944}
+
+#ui.game-ui .boss-hud{top:128px;width:min(520px,70vw)}
+#ui.game-ui .boss-hud>span{font:400 16px var(--t-serif);letter-spacing:3px;color:#f0c7b8;text-shadow:0 2px 6px #000}
+#ui.game-ui .boss-hud>div{height:16px;margin-top:8px;padding:2px;border:1px solid #d9b77980;background:#05070cdd;box-shadow:0 0 20px #a0283a44;position:relative}
+#ui.game-ui .boss-hud>div::before,#ui.game-ui .boss-hud>div::after{content:'';position:absolute;top:50%;width:9px;height:9px;background:var(--t-gold);transform:translateY(-50%) rotate(45deg)}
+#ui.game-ui .boss-hud>div::before{left:-6px}#ui.game-ui .boss-hud>div::after{right:-6px}
+#ui.game-ui .boss-hud i{height:10px;background:linear-gradient(180deg,#e2707a,#9a2b45 70%,#6d1d33)}
+
+/* danger feedback */
+#ui.game-ui .low-hp-vignette{position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .4s;background:radial-gradient(ellipse at 50% 50%,transparent 55%,#a0162c55 100%)}
+#ui.game-ui.low-hp .low-hp-vignette{opacity:1;animation:t-pulse 1.4s ease-in-out infinite}
+#ui.game-ui.low-hp .hp-track{border-color:#e57b84;box-shadow:0 0 14px #e05a6866}
+#ui.game-ui.low-hp .vitals-label strong{color:#ff9ea5}
+@keyframes t-pulse{0%,100%{opacity:.55}50%{opacity:1}}
+
+/* ---------- run overlays: Level-Up, Belohnung, Pause, Etage bereit ---------- */
+#ui .overlay-backdrop{background:radial-gradient(ellipse at 50% 35%,#1b1430b0,#04070fe6 75%);backdrop-filter:blur(4px);animation:sa-backdrop-in .22s ease both}
+#ui .pause-card{position:relative;width:min(520px,100%);padding:30px 44px 28px;border-radius:0;animation:sa-panel-in .3s cubic-bezier(.2,.8,.2,1) both}
+#ui .pause-card::before,#ui .pause-card::after{content:'';position:absolute;top:12px;width:26px;height:26px;border-top:2px solid var(--t-gold);pointer-events:none}
+#ui .pause-card::before{left:12px;border-left:2px solid var(--t-gold)}
+#ui .pause-card::after{right:12px;border-right:2px solid var(--t-gold)}
+#ui .pause-card .sa-seal{width:60px;height:60px;margin:0 auto 4px}
+#ui .pause-card .eyebrow{justify-content:center;font-size:11px}
+#ui .pause-card h2{font:400 clamp(32px,3.4vw,44px)/1.1 var(--t-serif);letter-spacing:1.5px;color:#f2e8d8;margin:12px 0 18px}
+#ui .pause-card p{font:14px/1.7 var(--t-body);color:#b9b1c4;margin-bottom:20px}
+#ui .pause-card p b{color:var(--t-gold-hi);font-weight:600}
+#ui .pause-facts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));padding:14px 0;margin:0 0 20px;border-top:1px solid var(--t-rule);border-bottom:1px solid var(--t-rule)}
+#ui .pause-facts span{display:flex;flex-direction:column;gap:4px;position:relative}
+#ui .pause-facts span+span::before{content:'';position:absolute;left:0;top:4px;bottom:4px;width:1px;background:var(--t-rule)}
+#ui .pause-facts small{font:600 10px var(--t-body);letter-spacing:1.8px;color:var(--t-muted)}
+#ui .pause-facts b{font:400 24px var(--t-serif);color:var(--t-gold-hi);font-variant-numeric:tabular-nums}
+#ui .pause-card .text-button{margin-top:6px}
+#ui .pause-card .pause-note{display:block;font:12px/1.5 var(--t-body);color:var(--t-muted);margin-top:2px}
+
+#ui .upgrade-panel{width:min(1040px,100%)}
+#ui .upgrade-panel>.eyebrow{font-size:12px;letter-spacing:3px}
+#ui .upgrade-panel h2{font:400 clamp(30px,3.6vw,48px)/1.1 var(--t-serif);letter-spacing:1.5px;color:#f4ead9;text-shadow:0 3px 26px #a78bdd33;margin:12px 0 10px}
+#ui .upgrade-panel>p{font:14px/1.6 var(--t-body);color:#b9b1c4;margin-bottom:28px}
+#ui .upgrade-panel>p kbd{margin:0 2px}
+#ui .upgrade-cards{gap:20px}
+#ui .upgrade-card{
+ --rar:var(--t-common);min-height:330px;padding:22px 22px 18px;border-radius:0;color:var(--t-text);overflow:hidden;
+ background:radial-gradient(ellipse at 50% 0%,color-mix(in srgb,var(--rar) 16%,transparent),transparent 60%),linear-gradient(165deg,var(--t-card-a),var(--t-card-b));
+ border:1px solid color-mix(in srgb,var(--rar) 45%,transparent);border-top:3px solid var(--rar);
+ box-shadow:0 18px 40px #0008,inset 0 0 0 1px #00000080;animation:t-card-in .38s cubic-bezier(.2,.8,.2,1) both}
+#ui .upgrade-card:nth-child(2){animation-delay:.06s}#ui .upgrade-card:nth-child(3){animation-delay:.12s}
+#ui .upgrade-card.rare{--rar:var(--t-rare)}
+#ui .upgrade-card.epic{--rar:var(--t-epic);box-shadow:0 18px 40px #0008,0 0 34px #c792f026,inset 0 0 0 1px #00000080}
+#ui .upgrade-card:hover,#ui .upgrade-card:focus-visible{transform:translateY(-8px);border-color:var(--rar);background:radial-gradient(ellipse at 50% 0%,color-mix(in srgb,var(--rar) 26%,transparent),transparent 65%),linear-gradient(165deg,#1d2a3d,#0e1624);box-shadow:0 24px 50px #000a,0 0 30px color-mix(in srgb,var(--rar) 30%,transparent)}
+#ui .upgrade-card:focus-visible{outline:2px solid var(--t-gold-hi);outline-offset:-5px}
+#ui .rarity{font:700 11px var(--t-body);letter-spacing:2.2px;color:var(--rar);justify-content:flex-start;gap:8px}
+#ui .rarity kbd{margin-left:auto}
+#ui .rarity-gem{width:9px;height:9px;background:var(--rar);transform:rotate(45deg);box-shadow:0 0 8px var(--rar)}
+#ui .upgrade-icon{width:76px;height:76px;margin:20px 0 18px;border:1px solid color-mix(in srgb,var(--rar) 50%,transparent);background:radial-gradient(circle,color-mix(in srgb,var(--rar) 28%,transparent),#05080e 72%);box-shadow:inset 0 0 18px #000a}
+#ui .upgrade-icon img{width:52px;height:52px;image-rendering:pixelated;filter:drop-shadow(0 3px 4px #000a)}
+#ui .card-type{font:700 10px var(--t-body);letter-spacing:2px;color:var(--t-muted)}
+#ui .upgrade-card h3{font:400 28px/1.15 var(--t-serif);color:#f4ead9;margin:8px 0 6px}
+#ui .card-level{font:700 11px var(--t-body);letter-spacing:1.5px;color:var(--t-gold)}
+#ui .upgrade-card p{font:14px/1.65 var(--t-body);color:#c4bfcd;margin:14px 0 18px}
+#ui .card-footer{border-top:1px solid var(--t-rule);font:700 12px var(--t-body);letter-spacing:.4px;color:var(--t-gold-hi);padding-top:14px}
+#ui .upgrade-panel>.secondary{margin:0 auto;min-width:260px}
+@keyframes t-card-in{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+
+/* ---------- responsive ---------- */
+@media(max-width:1100px){
+ #ui.game-ui .vitals{width:270px}
+ #ui.game-ui .run-clock strong{font-size:38px}
+ #ui.game-ui .arsenal .weapon-slot{width:38px;height:38px}
+ #ui.game-ui .arsenal .item-icon{width:26px;height:26px}
+ #ui .codex-preview{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:900px){
+ #ui .dialog{padding:34px 26px 24px}
+ #ui.game-ui .hud-top{padding:12px 12px 50px}
+ #ui.game-ui .vitals{width:220px;padding:9px 10px}
+ #ui.game-ui #live-stats{display:none}
+ #ui.game-ui .run-clock{top:8px;min-width:0;padding:6px 10px}
+ #ui.game-ui .run-clock strong{font-size:30px;letter-spacing:3px}
+ #ui.game-ui .run-clock>#phase-timer,#ui.game-ui .run-clock #resource-text{display:none}
+ #ui.game-ui .kill-counter{min-width:0;padding:6px 10px}
+ #ui.game-ui .kill-counter .item-icon{display:none}
+ #ui.game-ui .hud-bottom{padding:50px 12px 12px}
+ #ui.game-ui .arsenal .weapon-slot{width:32px;height:32px}
+ #ui.game-ui .arsenal .item-icon{width:22px;height:22px}
+ #ui.game-ui .dash-panel>div:last-child{width:120px}
+ #ui .upgrade-cards{gap:12px}
+ #ui .upgrade-card{min-height:290px;padding:18px}
+ #ui .upgrade-card h3{font-size:23px}
+}
+@media(max-width:650px){
+ #ui .dialog{padding:30px 18px 20px}
+ #ui .dialog::before{display:none}
+ #ui .codex-preview{grid-template-columns:1fr}
+ #ui .permanent-summary{gap:16px;flex-wrap:wrap}
+ #ui .pause-card{padding:26px 22px 22px}
+ #ui .pause-facts{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 0}
+ #ui .pause-facts span:nth-child(3)::before{display:none}
+ #ui.game-ui .vitals{width:170px}
+ #ui.game-ui .vitals-label .item-icon{display:none}
+ #ui.game-ui .vitals-label{font-size:10px}
+ #ui.game-ui .vitals-label strong{font-size:14px}
+ #ui.game-ui .level-row>span:last-child{display:none}
+ #ui.game-ui .run-clock{top:74px;padding:2px 10px}
+ #ui.game-ui .run-clock strong{font-size:24px;margin:2px 0}
+ #ui.game-ui .vitals{width:min(170px,44vw)}
+ #ui.game-ui .hud-bottom{flex-wrap:wrap;justify-content:flex-end;gap:8px}
+ #ui.game-ui .hud-bottom .dash-panel{order:-1}
+ #ui.game-ui .arsenal{width:100%}
+ #ui.game-ui .boss-hud{top:132px;width:86vw}
+ #ui.game-ui .run-clock>span:first-child{font-size:10px;letter-spacing:2px}
+ #ui.game-ui .kill-counter span{font-size:8px;letter-spacing:1px}
+ #ui.game-ui .kill-counter strong{font-size:20px}
+ #ui.game-ui .run-count .hud-pause{padding:6px 9px;font-size:0}
+ #ui.game-ui .hud-pause>span{display:none}
+ #ui.game-ui .dash-icon{display:none}
+ #ui.game-ui .hud-bottom .dash-panel{padding:8px 10px}
+ #ui.game-ui .dash-panel>div:last-child{width:96px}
+ #ui.game-ui .dash-panel span{font-size:9px;letter-spacing:.8px}
+ #ui.game-ui .dash-panel small{font-size:10px;letter-spacing:.5px}
+ #ui.game-ui .arsenal .weapon-slot{width:26px;height:26px}
+ #ui.game-ui .arsenal .item-icon{width:18px;height:18px}
+ #ui.game-ui .weapon-slot>span{font-size:8px;line-height:11px;min-width:11px}
+ #ui .upgrade-cards{grid-template-columns:1fr;gap:10px}
+ #ui .upgrade-card{min-height:0;padding:14px 14px 12px 96px}
+ #ui .upgrade-icon{position:absolute;left:14px;top:40px;width:66px;height:66px;margin:0}
+ #ui .upgrade-icon img{width:44px;height:44px}
+ #ui .upgrade-card h3{font-size:21px;margin:4px 0}
+ #ui .upgrade-card p{font-size:12px;margin:6px 0 8px}
+ #ui .card-footer{padding-top:8px;font-size:11px}
+ #ui .toast{bottom:120px;font-size:12px}
+}
+@media(prefers-reduced-motion:reduce){
+ #ui .dialog,#ui .dialog-layer,#ui .overlay-backdrop,#ui .pause-card,#ui .upgrade-card{animation:none}
+ #ui.game-ui.low-hp .low-hp-vignette{animation:none}
+ #ui .upgrade-card:hover,#ui .difficulty:hover:not(:disabled){transform:none}
+}

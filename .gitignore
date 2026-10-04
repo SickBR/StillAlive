@@ -44,3 +44,14 @@ Desktop.ini
 # V3 worktree-local generated caches and verification artifacts
 .vite-cache/
 reports/
+
+# Local copies, private saves and other models' output are never published
+.worktrees/
+.netrc
+_netrc
+.npmrc
+saves/
+savegames/
+*.sav
+*.save
+Claude outputs/
