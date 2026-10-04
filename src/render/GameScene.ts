@@ -5,7 +5,7 @@ import { Random } from '../core/random';
 import type { Settings } from '../core/storage';
 
 interface Effect extends GameEvent { life: number; maxLife: number; id: number }
-interface Label { text: Phaser.GameObjects.Text; life: number; maxLife: number; x: number; y: number }
+interface Label { text: Phaser.GameObjects.Text; life: number; maxLife: number; x: number; y: number; crit?: boolean }
 export class GameScene extends Phaser.Scene {
   engine?:Engine;
   settings!:Settings;
@@ -85,9 +85,9 @@ export class GameScene extends Phaser.Scene {
     const life=event.type==='lightning'?.22:event.type==='blade'?.25:event.type==='death'?.48:event.type==='dash'?.45:.65;
     if(['blade','thrust','frost','lightning','dash','death','impact','charge','overload'].includes(event.type)&&this.effects.length<180)this.effects.push({...event,life,maxLife:life,id:this.effectId++});
     if(event.type==='hit'&&this.settings.numbers&&this.labels.length<55){
-      const text=this.textPool.pop()??this.add.text(0,0,'',{fontFamily:'Georgia, serif',fontSize:'16px',stroke:'#111821',strokeThickness:3}).setDepth(11000).setOrigin(.5);
-      text.setText(String(event.value)).setColor(event.crit?'#f3d99c':'#d4d8ca').setFontSize(event.crit?21:15).setVisible(true).setAlpha(1);
-      this.labels.push({text,life:.65,maxLife:.65,x:event.x,y:event.y-30});
+      const text=this.textPool.pop()??this.add.text(0,0,'',{fontFamily:'"Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif',fontStyle:'bold',fontSize:'16px',stroke:'#07080b',strokeThickness:4}).setDepth(11000).setOrigin(.5);
+      text.setText(String(event.value)).setColor(event.crit?'#ffd27a':'#ece3cd').setFontSize(event.crit?24:15).setVisible(true).setAlpha(1).setScale(1);
+      this.labels.push({text,life:event.crit?.8:.65,maxLife:event.crit?.8:.65,x:event.x+(Math.random()-.5)*14,y:event.y-30,crit:event.crit});
     }
     if(this.settings.shake&&(event.type==='hurt'||event.type==='boss'))this.cameras.main.shake(event.type==='boss'?350:110,event.type==='boss'?.004:.0025);
   }
@@ -145,7 +145,7 @@ export class GameScene extends Phaser.Scene {
     this.effects=this.effects.filter(effect=>effect.life>0);
     for(const [key,image] of this.images)if(!seen.has(key)){image.setVisible(false);this.pool.push(image);this.images.delete(key);}
     const remaining:Label[]=[];
-    for(const label of this.labels){label.life-=dt;if(label.life<=0){label.text.setVisible(false);this.textPool.push(label.text);}else{label.text.setPosition(label.x,label.y-(1-label.life/label.maxLife)*29).setAlpha(Math.min(1,label.life*3));remaining.push(label);}}
+    for(const label of this.labels){label.life-=dt;if(label.life<=0){label.text.setVisible(false);this.textPool.push(label.text);}else{const age=1-label.life/label.maxLife;label.text.setPosition(label.x,label.y-age*29).setAlpha(Math.min(1,label.life*3)).setScale(label.crit?1+Math.max(0,.18-age)*3:1);remaining.push(label);}}
     this.labels=remaining;
     this.lighting.clear();
     if(e.eclipse){this.lighting.fillStyle(0x322035,.14);this.lighting.fillRect(0,0,1280,720);}
